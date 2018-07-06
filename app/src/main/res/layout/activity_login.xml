@@ -13,14 +13,14 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Usuario"
+        android:hint="@string/login_activity_user"
         android:id = "@+id/txtUser"
         />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Contraseña"
+        android:hint="@string/login_activity_pass"
         android:inputType="textPassword"
         android:id = "@+id/txtPassword"
         />
@@ -28,7 +28,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/login_activity_login"
         android:id = "@+id/btnLogin"
         />
 </android.widget.LinearLayout>
