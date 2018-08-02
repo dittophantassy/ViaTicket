@@ -1,4 +1,4 @@
-package com.grupoprominente.android.viaticket;
+package com.grupoprominente.android.viaticket.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.grupoprominente.android.viaticket.R;
 
 public class LoginActivity extends AppCompatActivity {
 
