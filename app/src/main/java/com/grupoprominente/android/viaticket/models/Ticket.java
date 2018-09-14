@@ -5,10 +5,19 @@ package com.grupoprominente.android.viaticket.models;
  */
 
 public class Ticket {
+    private long Id;
     private CurrencyType currency;
     private TicketType ticketType;
     private Float amount;
     private long DateTime;
+
+    public long getId() {
+        return Id;
+    }
+
+    public void setId(long id) {
+        Id = id;
+    }
 
     public CurrencyType getCurrency() {
         return currency;
