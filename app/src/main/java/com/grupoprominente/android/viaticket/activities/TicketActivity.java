@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.Button;
+
 
 import com.grupoprominente.android.viaticket.R;
 
@@ -57,6 +59,18 @@ public class TicketActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 startActivityForResult(intent, CAMERA_REQUEST);
+            }
+        });
+
+        Button okButton = (Button) this.findViewById(R.id.btnOK);
+        okButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TicketActivity.this, MainActivity.class);
+
+                startActivity(intent);
+                finish();
             }
         });
     }
