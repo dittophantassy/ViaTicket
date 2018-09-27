@@ -1,17 +1,23 @@
 package com.grupoprominente.android.viaticket.models;
-import com.orm.SugarRecord;
-
-import java.io.Serializable;
 
 /**
  * Created by FCouzo on 13/7/2018.
  */
 
-public class Ticket extends SugarRecord implements Serializable {
+public class Ticket {
+    private long Id;
     private CurrencyType currency;
     private TicketType ticketType;
     private Float amount;
     private long DateTime;
+
+    public long getId() {
+        return Id;
+    }
+
+    public void setId(long id) {
+        Id = id;
+    }
 
     public CurrencyType getCurrency() {
         return currency;

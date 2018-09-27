@@ -9,4 +9,16 @@
     <string name="login_activity_login">Login</string>
     <string name="main_activity_logout">Logout</string>
 
+
+    <string-array name="CurrencyTypes">
+        <item>Pesos</item>
+        <item>Dolares</item>
+    </string-array>
+
+    <string-array name="TicketTypes">
+        <item>Comida</item>
+        <item>Taxi</item>
+        <item>Transporte</item>
+        <item>Otro</item>
+    </string-array>
 </resources>
