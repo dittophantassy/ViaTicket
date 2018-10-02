@@ -9,17 +9,20 @@ import java.io.Serializable;
  */
 
 public class Ticket extends SugarRecord implements Serializable {
-    private long Id;
+    private Long Id;
     private CurrencyType currency;
     private TicketType ticketType;
     private Float amount;
-    private long DateTime;
+    private long issueDate;
+    private String imageFile;
+    private Expense expense;
+
 
     public Long getId() {
         return Id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         Id = id;
     }
 
@@ -47,11 +50,19 @@ public class Ticket extends SugarRecord implements Serializable {
         this.amount = amount;
     }
 
-    public long getDateTime() {
-        return DateTime;
+    public long getIssueDate() {
+        return issueDate;
     }
 
-    public void setDateTime(long dateTime) {
-        DateTime = dateTime;
+    public void setIssueDate(long issueDate) {
+        this.issueDate = issueDate;
     }
+
+    public String getImageFile() { return imageFile; }
+
+    public void setImageFile(String imageFile) { this.imageFile = imageFile; }
+
+    public Expense getExpense() { return expense; }
+
+    public void setExpense(Expense expense) { this.expense = expense; }
 }

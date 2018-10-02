@@ -33,14 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
     private MyRecyclerAdapter adapter;
     private DrawerLayout mDrawerLayout;
-
+    private MenuItem mPreviousMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -57,10 +55,14 @@ public class MainActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
+                        menuItem.setCheckable(true);
+                        menuItem.setChecked(true);
+                        if (mPreviousMenuItem != null) {
+                            mPreviousMenuItem.setChecked(false);
+                        }
+                        mPreviousMenuItem = menuItem;
+
 
                         switch (menuItem.getItemId()) {
                             case R.id.item_unasigned:
@@ -129,10 +131,10 @@ public class MainActivity extends AppCompatActivity {
 
         List<Ticket> ticketsList = new ArrayList<Ticket>();
 
-        for (int i = 0; i<10;i++){
+        for (int i = 0; i < 10; i++) {
             Ticket ticket = new Ticket();
-            ticket.setId((long)i);
-            ticket.setAmount((float)i);
+            ticket.setId((long) i);
+            ticket.setAmount((float) i);
             ticket.setCurrency(CurrencyType.PESO);
             ticket.setTicketType(TicketType.FOOD);
             ticketsList.add(ticket);

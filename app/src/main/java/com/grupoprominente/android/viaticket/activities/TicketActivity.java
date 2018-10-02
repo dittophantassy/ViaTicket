@@ -67,9 +67,9 @@ public class TicketActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TicketActivity.this, MainActivity.class);
+                //Intent intent = new Intent(TicketActivity.this, MainActivity.class);
 
-                startActivity(intent);
+                //startActivity(intent);
                 finish();
             }
         });
