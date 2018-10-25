@@ -10,7 +10,6 @@ public class ViaTicketApplication extends Application
     public void onCreate()
     {
         super.onCreate();
-
         SugarContext.init(this);
     }
 }

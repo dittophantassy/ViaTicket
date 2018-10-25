@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,7 +20,8 @@ import android.widget.Button;
 
 
 import com.grupoprominente.android.viaticket.R;
-
+import com.grupoprominente.android.viaticket.data.TicketDao;
+import com.grupoprominente.android.viaticket.models.Ticket;
 
 
 public class TicketActivity extends AppCompatActivity {
@@ -27,14 +29,20 @@ public class TicketActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private ImageButton imageButton;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
+    private EditText etNewTicketAmount;
 
+    private Ticket ticket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket);
+
+        etNewTicketAmount = findViewById(R.id.txtAmount);
+
         Bundle extras = getIntent().getExtras();
         long ticketId;
+
         if(extras != null) {
             ticketId = extras.getLong("ID");
             setTitle("Editar Ticket");
@@ -67,13 +75,11 @@ public class TicketActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(TicketActivity.this, MainActivity.class);
-
-                //startActivity(intent);
-                finish();
+                add();
             }
         });
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST) {
@@ -83,5 +89,17 @@ public class TicketActivity extends AppCompatActivity {
                 imageButton.setImageBitmap(image);
             }
         }
+    }
+
+    private void add()
+    {
+        if(ticket == null)
+            ticket = new Ticket();
+
+        //ticket.setAmount(etNewTicketDesc.getText().toString());
+
+        ticket.setAmount(Double.parseDouble(etNewTicketAmount.getText().toString()));
+        TicketDao.insert(ticket);
+        finish();
     }
 }

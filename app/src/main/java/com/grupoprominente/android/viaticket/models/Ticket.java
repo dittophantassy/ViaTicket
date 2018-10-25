@@ -1,6 +1,7 @@
 package com.grupoprominente.android.viaticket.models;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 import java.io.Serializable;
 
@@ -8,14 +9,17 @@ import java.io.Serializable;
  * Created by FCouzo on 13/7/2018.
  */
 
+@Table
 public class Ticket extends SugarRecord implements Serializable {
     private Long Id;
     private CurrencyType currency;
     private TicketType ticketType;
-    private Float amount;
+    private Double amount;
     private long issueDate;
     private String imageFile;
     private Expense expense;
+
+    private static final long serialVersionUID = 5530255968065458983L;
 
 
     public Long getId() {
@@ -42,11 +46,11 @@ public class Ticket extends SugarRecord implements Serializable {
         this.ticketType = ticketType;
     }
 
-    public Float getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

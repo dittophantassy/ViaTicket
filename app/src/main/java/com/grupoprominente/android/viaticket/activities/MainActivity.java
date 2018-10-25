@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.grupoprominente.android.viaticket.R;
 import com.grupoprominente.android.viaticket.adapters.MyRecyclerAdapter;
 import com.grupoprominente.android.viaticket.adapters.MyRecyclerAdapterClickListener;
+import com.grupoprominente.android.viaticket.data.TicketDao;
 import com.grupoprominente.android.viaticket.models.CurrencyType;
 import com.grupoprominente.android.viaticket.models.Ticket;
 import com.grupoprominente.android.viaticket.models.TicketType;
@@ -129,7 +130,8 @@ public class MainActivity extends AppCompatActivity {
         });
         rvTickets.setAdapter(adapter);
 
-        List<Ticket> ticketsList = new ArrayList<Ticket>();
+        List<Ticket> ticketsList = TicketDao.listAll();
+       /* List<Ticket> ticketsList = new ArrayList<Ticket>();
 
         for (int i = 0; i < 10; i++) {
             Ticket ticket = new Ticket();
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             ticket.setTicketType(TicketType.FOOD);
             ticketsList.add(ticket);
 
-        }
+        }*/
         adapter.addAll(ticketsList);
 
         FloatingActionButton btnAddTicket = findViewById(R.id.btnAddTicket);
