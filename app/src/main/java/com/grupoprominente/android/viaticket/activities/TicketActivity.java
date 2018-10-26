@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -20,8 +21,12 @@ import android.widget.Button;
 
 
 import com.grupoprominente.android.viaticket.R;
-import com.grupoprominente.android.viaticket.data.TicketDao;
 import com.grupoprominente.android.viaticket.models.Ticket;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class TicketActivity extends AppCompatActivity {
@@ -32,6 +37,7 @@ public class TicketActivity extends AppCompatActivity {
     private EditText etNewTicketAmount;
 
     private Ticket ticket;
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +105,24 @@ public class TicketActivity extends AppCompatActivity {
         //ticket.setAmount(etNewTicketDesc.getText().toString());
 
         ticket.setAmount(Double.parseDouble(etNewTicketAmount.getText().toString()));
-        TicketDao.insert(ticket);
+        ticket.save();
+
         finish();
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }
