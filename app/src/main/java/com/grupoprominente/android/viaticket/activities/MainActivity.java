@@ -131,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
         rvTickets.setAdapter(adapter);
 
         List<Ticket> ticketsList = TicketDao.listAll();
+        ticketsList.get(0).setTicketType(TicketType.TAXI);
+        ticketsList.get(1).setTicketType(TicketType.FOOD);
+        ticketsList.get(2).setTicketType(TicketType.TRANSPORT);
        /* List<Ticket> ticketsList = new ArrayList<Ticket>();
 
         for (int i = 0; i < 10; i++) {

@@ -99,6 +99,7 @@ public class TicketActivity extends AppCompatActivity {
         //ticket.setAmount(etNewTicketDesc.getText().toString());
 
         ticket.setAmount(Double.parseDouble(etNewTicketAmount.getText().toString()));
+
         TicketDao.insert(ticket);
         finish();
     }

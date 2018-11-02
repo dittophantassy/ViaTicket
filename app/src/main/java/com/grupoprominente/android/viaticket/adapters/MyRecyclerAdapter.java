@@ -23,15 +23,15 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
         private MyRecyclerAdapterClickListener clickListener;
 
         TextView tvTitle;
-        ImageView tvSubtitle;
+        ImageView imageCategory;
 
         public TicketViewHolder(View itemView, MyRecyclerAdapterClickListener listener) {
             super(itemView);
 
             clickListener = listener;
             itemView.setOnClickListener(this);
-            tvTitle = itemView.findViewById(R.id.tv_ticket_rv_title);
-            tvSubtitle = itemView.findViewById(R.id.iv_ticket_rv_image);
+            tvTitle = itemView.findViewById(R.id.tv_ticket_rv_amount);
+            imageCategory = itemView.findViewById(R.id.image_view_contact_display);
         }
 
         @Override
@@ -47,7 +47,7 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
     @NonNull
     @Override
     public TicketViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ticket_rv_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ticket_rv_item_new, parent, false);
         return new TicketViewHolder(v, clickListener);
     }
 
@@ -55,8 +55,33 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
     public void onBindViewHolder(@NonNull TicketViewHolder holder, int position) {
         Ticket t = getItems().get(position);
         holder.tvTitle.setText(t.getAmount().toString());
-        //Glide.with(holder.tvSubtitle.getContext()).load(t.getUrlLogo()).into(holder.tvSubtitle);
-        //holder.tvSubtitle.setText(String.valueOf(t.getAmount()));
+
+        if (t.getTicketType() != null) {
+            switch (t.getTicketType()) {
+                case TAXI:
+                    holder.imageCategory.setImageResource(R.drawable.ic_local_taxi_black_24dp);
+                    holder.imageCategory.setBackgroundResource(R.drawable.circle);
+                    break;
+                case FOOD:
+                    holder.imageCategory.setImageResource(R.drawable.ic_restaurant_black_24dp);
+                    holder.imageCategory.setBackgroundResource(R.drawable.circle_food);
+                    break;
+
+                case TRANSPORT:
+                    holder.imageCategory.setImageResource(R.drawable.ic_train_black_24dp);
+                    holder.imageCategory.setBackgroundResource(R.drawable.circle_transport);
+
+                    break;
+
+                default:
+                    holder.imageCategory.setImageResource(R.drawable.ic_train_black_24dp);
+                    holder.imageCategory.setBackgroundResource(R.drawable.circle_transport);
+
+                    break;
+            }
+            //Glide.with(holder.tvSubtitle.getContext()).load(t.getUrlLogo()).into(holder.tvSubtitle);
+            //holder.tvSubtitle.setText(String.valueOf(t.getAmount()));
+        }
     }
 
 }
