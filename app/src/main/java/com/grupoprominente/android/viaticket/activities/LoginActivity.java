@@ -91,8 +91,8 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-               btnLogin.setVisibility(View.INVISIBLE);
-               pbLogin.setVisibility(View.VISIBLE);
+            btnLogin.setVisibility(View.INVISIBLE);
+            pbLogin.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
             if (user != null && user.getCode() == 0) {
                 startHomeActivity();
             } else {
-               btnLogin.setVisibility(View.VISIBLE);
+                btnLogin.setVisibility(View.VISIBLE);
 
                 if (user != null) {
                     Snackbar.make(findViewById(android.R.id.content), "Nombre de usuario o password incorrecto", Snackbar.LENGTH_SHORT).show();

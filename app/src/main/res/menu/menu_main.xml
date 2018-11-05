@@ -10,25 +10,6 @@
             android:icon="@drawable/ic_add_black_24dp"
             android:title="@string/main_activity_my_trips">
             <menu>
-                <item
-                    android:id="@+id/item_viaje_1"
-                    android:icon="@drawable/ic_flight_black_24dp"
-                    android:title="viaje 1" />
-
-                <item
-                    android:id="@+id/item_viaje_2"
-                    android:icon="@drawable/ic_flight_black_24dp"
-                    android:title="viaje 2" />
-
-                <item
-                    android:id="@+id/item_viaje_3"
-                    android:icon="@drawable/ic_flight_black_24dp"
-                    android:title="viaje 3" />
-
-                <item
-                    android:id="@+id/item_viaje_4"
-                    android:icon="@drawable/ic_flight_black_24dp"
-                    android:title="viaje 4" />
             </menu>
         </item>
     </group>

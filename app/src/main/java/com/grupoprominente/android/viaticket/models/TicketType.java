@@ -5,5 +5,5 @@ package com.grupoprominente.android.viaticket.models;
  */
 
 public enum TicketType {
-    FOOD, TAXI, TRANSPORT, OTHER
+    FOOD, TAXI, TRANSPORT, LODGING, OTHER
 }

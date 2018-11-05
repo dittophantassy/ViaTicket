@@ -10,7 +10,10 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.grupoprominente.android.viaticket.constants.ApiConstants;
+import com.grupoprominente.android.viaticket.models.Trip;
 import com.grupoprominente.android.viaticket.models.User;
 
 public class RestApi
@@ -45,6 +48,24 @@ public class RestApi
         }
 
         return user;
+    }
+
+    public ArrayList<Trip> getTripsByUsername(String username) {
+        ArrayList<Trip> tripsByUser = new ArrayList<>();
+
+        try
+        {
+            Retrofit retrofit = buildRetrofit();
+            ApiService apiService = retrofit.create(ApiService.class);
+            Call<ArrayList<Trip>> tripsCall = apiService.getTripsByUsername(username);
+            tripsByUser = tripsCall.execute().body();
+        }
+        catch(Exception e)
+        {
+            String a = "";
+        }
+
+        return tripsByUser;
     }
 
 //    public GenericResponse signUp(HashMap<String, String> userData)
@@ -258,9 +279,13 @@ public class RestApi
 
     private Retrofit buildRetrofit()
     {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+
         return new Retrofit.Builder().
                 baseUrl(ApiConstants.API_BASE_URL).
-                addConverterFactory(GsonConverterFactory.create()).
+                addConverterFactory(GsonConverterFactory.create(gson)).
                 build();
     }
 }
