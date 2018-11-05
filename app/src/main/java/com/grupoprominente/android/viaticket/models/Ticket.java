@@ -18,7 +18,7 @@ public class Ticket extends SugarRecord implements Serializable {
     private long issueDate;
     private String imageFile;
     private Expense expense;
-
+    private Area area;
     private static final long serialVersionUID = 5530255968065458983L;
 
 
@@ -69,4 +69,9 @@ public class Ticket extends SugarRecord implements Serializable {
     public Expense getExpense() { return expense; }
 
     public void setExpense(Expense expense) { this.expense = expense; }
+
+    public Area getArea() { return area; }
+
+    public void setArea(Area area) { this.area = area; }
+
 }
