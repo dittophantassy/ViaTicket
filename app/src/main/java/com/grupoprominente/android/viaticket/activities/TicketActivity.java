@@ -1,14 +1,10 @@
 package com.grupoprominente.android.viaticket.activities;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,51 +12,60 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.Button;
 
 
 import com.grupoprominente.android.viaticket.R;
+import com.grupoprominente.android.viaticket.models.CurrencyType;
+import com.grupoprominente.android.viaticket.models.Expense;
 import com.grupoprominente.android.viaticket.models.Ticket;
+import com.grupoprominente.android.viaticket.models.TicketType;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class TicketActivity extends AppCompatActivity {
 
+    private Ticket ticket;
+    private long ticketId;
+    private long expenseId;
+
     private static final int CAMERA_REQUEST = 1888;
     private ImageButton imageButton;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
-    private EditText etNewTicketAmount;
+    private EditText etAmount;
+    private Spinner spnCurrency;
+    private Spinner spnTypes;
+    private Uri mCurrentPhotoPath;
+    private Uri mTempPhotoPath;
 
-    private Ticket ticket;
-    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket);
 
-        etNewTicketAmount = findViewById(R.id.txtAmount);
+        etAmount = findViewById(R.id.txtAmount);
 
         Bundle extras = getIntent().getExtras();
-        long ticketId;
 
         if(extras != null) {
-            ticketId = extras.getLong("ID");
+            ticketId = extras.getLong("TICKET_ID");
+            expenseId = extras.getLong("EXPENSE_ID");
             setTitle("Editar Ticket");
         }
 
 
-        Spinner spnCurrency = (Spinner) findViewById(R.id.spnCurrency);
+        spnCurrency = (Spinner) findViewById(R.id.spnCurrency);
         ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource(this, R.array.CurrencyTypes, android.R.layout.simple_spinner_item);
         currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCurrency.setAdapter(currencyAdapter);
 
-        Spinner spnTypes = (Spinner) findViewById(R.id.spnTicketType);
+        spnTypes = (Spinner) findViewById(R.id.spnTicketType);
         ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(this, R.array.TicketTypes, android.R.layout.simple_spinner_item);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnTypes.setAdapter(typeAdapter);
@@ -72,7 +77,23 @@ public class TicketActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                startActivityForResult(intent, CAMERA_REQUEST);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                    } catch (IOException ex) {
+
+                    }
+
+                    if (photoFile != null) {
+                        Uri photoURI = FileProvider.getUriForFile(TicketActivity.this,
+                                "com.grupoprominente.android.viaticket.fileprovider",
+                                photoFile);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        mTempPhotoPath = photoURI;
+                        startActivityForResult(intent, CAMERA_REQUEST);
+                    }
+                }
             }
         });
 
@@ -81,7 +102,7 @@ public class TicketActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                add();
+                save();
             }
         });
     }
@@ -89,22 +110,42 @@ public class TicketActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST) {
-            if (data.getExtras() != null)
+            if (resultCode == RESULT_CANCELED){
+                File f = new File(mTempPhotoPath.getPath());
+                f.delete();
+            }
+            else if (resultCode == RESULT_OK)
             {
-                Bitmap image = (Bitmap) data.getExtras().get("data");
-                imageButton.setImageBitmap(image);
+                mCurrentPhotoPath = mTempPhotoPath;
+                imageButton.setImageURI(mCurrentPhotoPath);
             }
         }
     }
 
-    private void add()
+    private void save()
     {
         if(ticket == null)
             ticket = new Ticket();
 
-        //ticket.setAmount(etNewTicketDesc.getText().toString());
+        if (expenseId>0){
+            ticket.setExpense(Expense.findById(Expense.class, expenseId));
+        }
+        //TODO validar, no dejar al usuario aceptar con un monto vacío (0 creo que debería dejar)
+        String amount = etAmount.getText().toString();
+        if (!amount.isEmpty()){
+            ticket.setAmount(Double.parseDouble(etAmount.getText().toString()));
+        }
+        else {
 
-        ticket.setAmount(Double.parseDouble(etNewTicketAmount.getText().toString()));
+            return;
+        }
+
+        ticket.setCurrency(CurrencyType.values()[(int)spnCurrency.getSelectedItemId()]);
+        ticket.setTicketType(TicketType.values()[(int)spnTypes.getSelectedItemId()]);
+        //TODO es obligatoria la foto?
+        if (mCurrentPhotoPath!= null)
+            ticket.setImageFile(mCurrentPhotoPath.toString());
+
         ticket.save();
 
         finish();
@@ -112,7 +153,7 @@ public class TicketActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -122,7 +163,6 @@ public class TicketActivity extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 }

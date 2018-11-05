@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private MyRecyclerAdapter adapter;
     private DrawerLayout mDrawerLayout;
     private MenuItem mPreviousMenuItem;
+    private long currentExpenseId = -1L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,33 +117,19 @@ public class MainActivity extends AppCompatActivity {
                 Ticket t = adapter.getItems().get(position);
 
                 Intent intent = new Intent(MainActivity.this, TicketActivity.class);
-                intent.putExtra("ID", t.getId());
-
+                intent.putExtra("TICKET_ID", t.getId());
+                intent.putExtra("EXPENSE_ID", currentExpenseId);
                 startActivity(intent);
 
             }
 
             @Override
             public void onItemLongClick(View v, int position) {
-
             }
         });
+
         rvTickets.setAdapter(adapter);
 
-        List<Ticket> ticketsList = Ticket.listAll(Ticket.class);
-        //List<Ticket> ticketsList = TicketDao.listAll();
-       /* List<Ticket> ticketsList = new ArrayList<Ticket>();
-
-        for (int i = 0; i < 10; i++) {
-            Ticket ticket = new Ticket();
-            ticket.setId((long) i);
-            ticket.setAmount((float) i);
-            ticket.setCurrency(CurrencyType.PESO);
-            ticket.setTicketType(TicketType.FOOD);
-            ticketsList.add(ticket);
-
-        }*/
-        adapter.addAll(ticketsList);
 
         FloatingActionButton btnAddTicket = findViewById(R.id.btnAddTicket);
         btnAddTicket.setOnClickListener(
@@ -150,10 +137,24 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(MainActivity.this, TicketActivity.class);
+                        intent.putExtra("TICKET_ID", -1L);
+                        intent.putExtra("EXPENSE_ID", currentExpenseId);
                         startActivity(intent);
                     }
                 }
         );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        List<Ticket> ticketsList = new ArrayList<Ticket>();
+        if (currentExpenseId>0)
+            ticketsList = Ticket.find(Ticket.class, "expense = ?",String.valueOf(currentExpenseId));
+        else
+            ticketsList = Ticket.find(Ticket.class,"expense is null");
+        adapter.setItems(ticketsList);
+
     }
 
     @Override

@@ -1,67 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.TicketActivity"
+    android:orientation="vertical"
     >
 
-    <EditText
-        android:id="@+id/txtAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="monto"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toStartOf="@+id/spnCurrency"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/txtAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="monto"
+            android:digits="0123456789."
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toStartOf="@+id/spnCurrency"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/spnCurrency"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/txtAmount"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/txtAmount"/>
+        <Spinner
+            android:id="@+id/spnCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/txtAmount"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/txtAmount"/>
 
-    <TextView
-        android:id="@+id/lblTicketType"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:gravity="bottom"
-        android:text="tipo"
-        android:inputType="none"
 
-        app:layout_constraintStart_toStartOf="@+id/txtAmount"
-        app:layout_constraintTop_toBottomOf="@id/txtAmount"
-        />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Spinner
-        android:id="@+id/spnTicketType"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginLeft="16dp"
-        android:ems="10"
-        android:hint="hola"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@id/spnCurrency"
-        app:layout_constraintBottom_toBottomOf="@id/lblTicketType"/>
+        <Spinner
+
+            android:id="@+id/spnTicketType"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:inputType="textPersonName"/>
+    </LinearLayout>
+
+
 
     <ImageButton
         android:id="@+id/btnPhoto"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -69,7 +66,6 @@
         android:src="@drawable/ic_photo_camera_black_24dp"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/lblTicketType"
         app:layout_constraintBottom_toTopOf="@id/btnOK"/>
 
     <Button
@@ -81,4 +77,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnPhoto"/>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

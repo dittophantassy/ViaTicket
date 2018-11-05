@@ -1,0 +1,241 @@
+{
+  "areas": [{
+    "nombre": "APLICACIONES",
+    "nomenclatura": 1,
+    "hijos": [{
+      "nombre": "Solucion de sw./Producto",
+      "nomenclatura": 2,
+      "hijos": [{
+        "nombre": "Pectra BPM",
+        "nomenclatura": 1
+      }, {
+        "nombre": "Hub",
+        "nomenclatura": 2
+      }, {
+        "nombre": "Mr Bubo",
+        "nomenclatura": 3
+      }, {
+        "nombre": "PREM",
+        "nomenclatura": 4
+      }]
+    }, {
+      "nombre": "Servicio al Cliente/Soporte de Aplicaciones",
+      "nomenclatura": 4,
+      "hijos": [{
+        "nombre": "Consultoria BI",
+        "nomenclatura": 3
+      }, {
+        "nombre": "Consultoria de Pectra BPM",
+        "nomenclatura": 4
+      }, {
+        "nombre": "Consultoria de PREM",
+        "nomenclatura": 5
+      }, {
+        "nombre": "Consultoria de Mr. Bubo",
+        "nomenclatura": 6
+      }, {
+        "nombre": "Consultoria de O365",
+        "nomenclatura": 7
+      }, {
+        "nombre": "Analista Funcional",
+        "nomenclatura": 8
+      }, {
+        "nombre": "Mant SW.",
+        "nomenclatura": 2
+      }]
+    }, {
+      "nombre": "Proyecto de SW./ Desarrollo de Aplicaciones",
+      "nomenclatura": 3,
+      "hijos": [{
+        "nombre": "Proyecto de SW.",
+        "nomenclatura": 1
+      }]
+    }
+
+    ]
+  }, {
+    "nombre": "INFRAESTRUCTURA",
+    "nomenclatura": 1,
+    "hijos": [{
+      "nombre": "Monitoreo/MDA",
+      "nomenclatura": 5,
+      "hijos": [{
+        "nombre": "Monitoreo de Servicios",
+        "nomenclatura": 12
+      }, {
+        "nombre": "Mesa de Ayuda",
+        "nomenclatura": 13
+      }]
+    }, {
+      "nombre": "Operaciones de Servicio - DATA CENTER",
+      "nomenclatura": 7,
+      "hijos": [{
+        "nombre": "Servicio de Data Center",
+        "nomenclatura": 9
+      }, {
+        "nombre": "Consultoria de Infraestructura",
+        "nomenclatura": 10
+      }]
+    }, {
+      "nombre": "Soporte Tecnico - Infraestructura",
+      "nomenclatura": 6,
+      "hijos": [{
+        "nombre": "Soporte Tecnico",
+        "nomenclatura": 11
+      }, {
+        "nombre": "Servicios Profesionales On Site",
+        "nomenclatura": 18
+      }]
+    }, {
+      "nombre": "Planificacion y Asesoramiento - Servicio Infraestructura",
+      "nomenclatura": 8
+    }]
+  }, {
+    "nombre": "PMO",
+    "nomenclatura": 1,
+    "hijos": [{
+      "nombre": "Calidad/PMO",
+      "nomenclatura": 1,
+      "hijos": [{
+        "nombre": "Gestion de Proyectos y Servicios",
+        "nomenclatura": 17
+      }]
+    }, {
+      "nombre": "OFICINA DE PROYECTOS",
+      "nomenclatura": 2
+    }
+
+    ]
+  }, {
+    "nombre": "TECNOLOGIA",
+    "nomenclatura": 3,
+    "hijos": [{
+      "nombre": "BRA",
+      "nomenclatura": 1,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }, {
+      "nombre": "BRH",
+      "nomenclatura": 2,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }, {
+      "nombre": "MTV",
+      "nomenclatura": 3,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }, {
+      "nombre": "CORREDORES",
+      "nomenclatura": 4,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }, {
+      "nombre": "BCyL/BRD/SOFSE",
+      "nomenclatura": 5,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }, {
+      "nombre": "MONEDERO",
+      "nomenclatura": 6,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }, {
+      "nombre": "Preventa",
+      "nomenclatura": 7,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }, {
+      "nombre": "TRADITUM",
+      "nomenclatura": 8,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }, {
+      "nombre": "GESTION DE PROCESO DE NEGOCIOS",
+      "nomenclatura": 10,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }, {
+      "nombre": "INGENIERIA INFORMATICA",
+      "nomenclatura": 11,
+      "hijos": [{
+        "nombre": "Gestion de Outsorcing",
+        "nomenclatura": 16
+      }]
+    }]
+  }, {
+    "nombre": "COMERCIAL",
+    "nomenclatura": 3,
+    "hijos": [{
+      "nombre": "Ventas",
+      "nomenclatura": 1
+    }, {
+      "nombre": "MKT",
+      "nomenclatura": 2
+    }, {
+      "nombre": "RRII",
+      "nomenclatura": 3
+    }, {
+      "nombre": "PREVENTA",
+      "nomenclatura": 4
+    }]
+  }, {
+    "nombre": "BACK OFFICE",
+    "nomenclatura": 6,
+    "hijos": [{
+      "nombre": "Adm. Y Fin.",
+      "nomenclatura": 1
+    }, {
+      "nombre": "Adm. De ventas y contrataciones",
+      "nomenclatura": 2
+    }]
+  }, {
+    "nombre": "RRHH",
+    "nomenclatura": 7,
+    "hijos": [{
+      "nombre": "Recursos humanos",
+      "nomenclatura": 1
+    }]
+  }, {
+    "nombre": "MANTENIMIENTO",
+    "nomenclatura": 8,
+    "hijos": [{
+      "nombre": "Cordoba",
+      "nomenclatura": 1
+    }, {
+      "nombre": "Buenos Aires",
+      "nomenclatura": 2
+    }]
+  }, {
+    "nombre": "GERENCIA GENERAL",
+    "nomenclatura": 5,
+    "hijos": [{
+      "nombre": "Gerencia General",
+      "nomenclatura": 1
+    }]
+  }, {
+    "nombre": "PRESIDENCIA",
+    "nomenclatura": 4,
+    "hijos": [{
+      "nombre": "Presidencia",
+      "nomenclatura": 1
+    }]
+  }]
+}

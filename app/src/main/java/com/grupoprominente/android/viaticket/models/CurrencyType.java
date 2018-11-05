@@ -5,5 +5,11 @@ package com.grupoprominente.android.viaticket.models;
  */
 
 public enum CurrencyType {
-    PESO, DOLLAR
+    PESO (0), DOLLAR (1);
+
+    private int type;
+
+    private CurrencyType(int type){
+        this.type = type;
+    }
 }
