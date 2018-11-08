@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, TicketActivity.class);
                 intent.putExtra("ID", t.getId());
+                intent.putExtra("TRIP_ID", (selectedTrip != null) ? selectedTrip.getIdTrip() : 0);
 
                 startActivity(intent);
 
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(MainActivity.this, TicketActivity.class);
-                        intent.putExtra("tripId", (selectedTrip != null) ? selectedTrip.getIdTrip() : 0);
+                        intent.putExtra("TRIP_ID", (selectedTrip != null) ? selectedTrip.getIdTrip() : 0);
 
                         startActivity(intent);
                     }

@@ -13,17 +13,4 @@
     <string name="toolbar_action_label_assign">Asignar</string>
     <string name="toolbar_action_label_pay">Rendir</string>
 
-    <string-array name="CurrencyTypes">
-        <item>Pesos</item>
-        <item>Dólares</item>
-    </string-array>
-
-    <string-array name="TicketTypes">
-        <item>Comida</item>
-        <item>Taxi</item>
-        <item>Transporte</item>
-        <item>Alojamiento</item>
-        <item>Otro</item>
-    </string-array>
-
 </resources>

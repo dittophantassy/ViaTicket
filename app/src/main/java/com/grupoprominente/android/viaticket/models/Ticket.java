@@ -26,7 +26,6 @@ public class Ticket extends SugarRecord implements Serializable {
     @SerializedName("Fecha")
     private Date issueDate;
     private String imageFile;
-    private Expense expense;
     @SerializedName("CID")
     private String cid;
     @SerializedName("Imagen")
@@ -94,14 +93,6 @@ public class Ticket extends SugarRecord implements Serializable {
 
     public void setImageFile(String imageFile) {
         this.imageFile = imageFile;
-    }
-
-    public Expense getExpense() {
-        return expense;
-    }
-
-    public void setExpense(Expense expense) {
-        this.expense = expense;
     }
 
     public String getCid() {

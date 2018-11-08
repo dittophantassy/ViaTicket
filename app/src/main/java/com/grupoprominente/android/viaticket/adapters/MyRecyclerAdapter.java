@@ -71,8 +71,10 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
     @Override
     public void onBindViewHolder(@NonNull TicketViewHolder holder, int position) {
         Ticket t = getItems().get(position);
-        holder.txtCategory.setText(holder.view.getResources().getTextArray(R.array.TicketTypes)[t.getTicketType().ordinal()]);
-        holder.txtIssueDate.setText(holder.dateFormat.format("dd/MM", t.getIssueDate()));
+        if (t.getTicketType()!=null)
+            holder.txtCategory.setText(t.getTicketType().toString());
+        if (t.getIssueDate()!=null)
+            holder.txtIssueDate.setText(holder.dateFormat.format("dd/MM", t.getIssueDate()));
         holder.txtAmount.setText(t.getAmount().toString());
 
         Drawable ticketBackground = holder.imageCategory.getBackground();
