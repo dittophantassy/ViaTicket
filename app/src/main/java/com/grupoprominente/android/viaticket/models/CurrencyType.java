@@ -1,15 +1,14 @@
 package com.grupoprominente.android.viaticket.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by FCouzo on 13/7/2018.
  */
 
 public enum CurrencyType {
-    PESO (0), DOLLAR (1);
-
-    private int type;
-
-    private CurrencyType(int type){
-        this.type = type;
-    }
+    @SerializedName("1")
+    PESO,
+    @SerializedName("2")
+    DOLLAR
 }

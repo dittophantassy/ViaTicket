@@ -1,107 +1,77 @@
 package com.grupoprominente.android.viaticket.activities;
 
-import android.app.DatePickerDialog;
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.Button;
 
 
 import com.grupoprominente.android.viaticket.R;
 import com.grupoprominente.android.viaticket.models.CurrencyType;
-import com.grupoprominente.android.viaticket.models.Expense;
 import com.grupoprominente.android.viaticket.models.Ticket;
 import com.grupoprominente.android.viaticket.models.TicketType;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class TicketActivity extends AppCompatActivity {
 
-    private Ticket ticket;
-    private long ticketId;
-    private long expenseId;
-
     private static final int CAMERA_REQUEST = 1888;
     private ImageButton imageButton;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
-    private EditText etAmount;
-    private Spinner spnCurrency;
-    private Spinner spnTypes;
-    private EditText txtIssued;
-    private Calendar myCalendar;
-    DatePickerDialog.OnDateSetListener dateListener;
-    private Uri mCurrentPhotoPath;
-    private Uri mTempPhotoPath;
+    private EditText etNewTicketAmount;
+
+    private Ticket ticket;
+    private String mCurrentPhotoPath;
+ private int tripId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket);
 
-        etAmount = findViewById(R.id.txtAmount);
+        etNewTicketAmount = findViewById(R.id.txtAmount);
 
         Bundle extras = getIntent().getExtras();
+        long ticketId;
 
         if(extras != null) {
-            ticketId = extras.getLong("TICKET_ID");
-            expenseId = extras.getLong("EXPENSE_ID");
+            ticketId = extras.getLong("ID");
+            tripId = extras.getInt("tripId");
             setTitle("Editar Ticket");
         }
 
 
-        spnCurrency = (Spinner) findViewById(R.id.spnCurrency);
+        Spinner spnCurrency = (Spinner) findViewById(R.id.spnCurrency);
         ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource(this, R.array.CurrencyTypes, android.R.layout.simple_spinner_item);
         currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCurrency.setAdapter(currencyAdapter);
 
-        spnTypes = (Spinner) findViewById(R.id.spnTicketType);
+        Spinner spnTypes = (Spinner) findViewById(R.id.spnTicketType);
         ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(this, R.array.TicketTypes, android.R.layout.simple_spinner_item);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnTypes.setAdapter(typeAdapter);
 
-        txtIssued = (EditText) findViewById(R.id.txtIssued);
-        myCalendar = Calendar.getInstance();
-        myCalendar.set(Calendar.HOUR_OF_DAY, 0);
-        updateLabel();
-
-
-        dateListener = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-
-        };
-
-        txtIssued.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(TicketActivity.this, dateListener, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
 
         imageButton = (ImageButton) this.findViewById(R.id.btnPhoto);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -109,23 +79,7 @@ public class TicketActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-
-                    }
-
-                    if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(TicketActivity.this,
-                                "com.grupoprominente.android.viaticket.fileprovider",
-                                photoFile);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        mTempPhotoPath = photoURI;
-                        startActivityForResult(intent, CAMERA_REQUEST);
-                    }
-                }
+                startActivityForResult(intent, CAMERA_REQUEST);
             }
         });
 
@@ -134,7 +88,7 @@ public class TicketActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                save();
+                add();
             }
         });
     }
@@ -142,57 +96,38 @@ public class TicketActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST) {
-            if (resultCode == RESULT_CANCELED){
-                File f = new File(mTempPhotoPath.getPath());
-                f.delete();
-            }
-            else if (resultCode == RESULT_OK)
+            if (data.getExtras() != null)
             {
-                mCurrentPhotoPath = mTempPhotoPath;
-                imageButton.setImageURI(mCurrentPhotoPath);
+                Bitmap image = (Bitmap) data.getExtras().get("data");
+                imageButton.setImageBitmap(image);
             }
         }
     }
 
-    private void updateLabel() {
-        String myFormat = "dd/MM/yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-        txtIssued.setText(sdf.format(myCalendar.getTime()));
-    }
-
-    private void save()
+    private void add()
     {
         if(ticket == null)
             ticket = new Ticket();
 
-        if (expenseId>0){
-            ticket.setExpense(Expense.findById(Expense.class, expenseId));
-        }
-        //TODO validar, no dejar al usuario aceptar con un monto vacío (0 creo que debería dejar)
-        String amount = etAmount.getText().toString();
-        if (!amount.isEmpty()){
-            ticket.setAmount(Double.parseDouble(etAmount.getText().toString()));
-        }
-        else {
+        Ticket t1 = new Ticket();
+        t1.setIdTrip(tripId);
 
-            return;
-        }
+        Random rand = new Random();
 
-        ticket.setCurrency(CurrencyType.values()[(int)spnCurrency.getSelectedItemId()]);
-        ticket.setTicketType(TicketType.values()[(int)spnTypes.getSelectedItemId()]);
-        //TODO es obligatoria la foto?
-        if (mCurrentPhotoPath!= null)
-            ticket.setImageFile(mCurrentPhotoPath.toString());
+        int randomNum = rand.nextInt((4 - 0) + 1) + 0;
+        t1.setTicketType(TicketType.values()[randomNum]);
+        t1.setCurrency(CurrencyType.PESO);
+        t1.setIssueDate(new Date());
 
-        ticket.save();
+        t1.setAmount(Double.parseDouble(etNewTicketAmount.getText().toString()));
+        t1.save();
 
         finish();
     }
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -202,6 +137,7 @@ public class TicketActivity extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 }

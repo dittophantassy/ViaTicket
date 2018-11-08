@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/item_unasigned"
+            android:id="@+id/item_unassigned"
             android:icon="@drawable/ic_add_black_24dp"
-            android:title="Items sin asignar" />
+            android:title="@string/unassigned_tickets" />
         <item
             android:id="@+id/nav_expenses"
             android:icon="@drawable/ic_add_black_24dp"

@@ -1,10 +1,14 @@
 package com.grupoprominente.android.viaticket.models;
 
-import com.google.gson.annotations.SerializedName;
+import android.app.Application;
 
+import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class Trip {
+public class Trip extends SugarRecord implements Serializable {
     @SerializedName("IdViaje")
     private int idTrip;
     @SerializedName("CID")
@@ -54,5 +58,11 @@ public class Trip {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    @Override
+    public String toString() {
+        android.text.format.DateFormat dateFormat = new android.text.format.DateFormat();
+        return destination + " - " + dateFormat.format("dd/MM", tripDate);
     }
 }

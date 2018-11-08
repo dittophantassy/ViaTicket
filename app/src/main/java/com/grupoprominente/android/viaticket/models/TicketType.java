@@ -1,15 +1,20 @@
 package com.grupoprominente.android.viaticket.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by FCouzo on 13/7/2018.
  */
 
 public enum TicketType {
-    FOOD (0), TAXI (1), TRANSPORT (2), LODGING (3), OTHER (4);
-
-    private int type;
-
-    private TicketType(int type){
-        this.type = type;
-    }
+    @SerializedName("1")
+    FOOD,
+    @SerializedName("2")
+    TAXI,
+    @SerializedName("3")
+    TRANSPORT,
+    @SerializedName("4")
+    LODGING,
+    @SerializedName("5")
+    OTHER
 }

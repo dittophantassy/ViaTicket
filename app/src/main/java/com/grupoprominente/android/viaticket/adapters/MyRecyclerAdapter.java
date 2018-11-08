@@ -1,6 +1,7 @@
 package com.grupoprominente.android.viaticket.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
@@ -25,16 +26,28 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
     protected static class TicketViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private MyRecyclerAdapterClickListener clickListener;
 
-        TextView tvTitle;
+        View view;
+
+        TextView txtCategory;
+        TextView txtAmount;
+        TextView txtIssueDate;
         ImageView imageCategory;
+
+        android.text.format.DateFormat dateFormat;
 
         public TicketViewHolder(View itemView, MyRecyclerAdapterClickListener listener) {
             super(itemView);
 
+            view = itemView;
+
             clickListener = listener;
             itemView.setOnClickListener(this);
-            tvTitle = itemView.findViewById(R.id.tv_ticket_rv_amount);
-            imageCategory = itemView.findViewById(R.id.image_view_ticket_type);
+            imageCategory = itemView.findViewById(R.id.tv_ticket_imgCategory);
+            txtCategory = itemView.findViewById(R.id.tv_ticket_txtCategory);
+            txtAmount = itemView.findViewById(R.id.tv_ticket_txtAmount);
+            txtIssueDate = itemView.findViewById(R.id.tv_ticket_txtIssueDate);
+
+            dateFormat = new android.text.format.DateFormat();
         }
 
         @Override
@@ -58,7 +71,9 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
     @Override
     public void onBindViewHolder(@NonNull TicketViewHolder holder, int position) {
         Ticket t = getItems().get(position);
-        holder.tvTitle.setText(t.getAmount().toString());
+        holder.txtCategory.setText(holder.view.getResources().getTextArray(R.array.TicketTypes)[t.getTicketType().ordinal()]);
+        holder.txtIssueDate.setText(holder.dateFormat.format("dd/MM", t.getIssueDate()));
+        holder.txtAmount.setText(t.getAmount().toString());
 
         Drawable ticketBackground = holder.imageCategory.getBackground();
 
@@ -66,37 +81,31 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
             switch (t.getTicketType()) {
                 case TAXI:
                     holder.imageCategory.setImageResource(R.drawable.ic_local_taxi_black_24dp);
-                    holder.imageCategory.setBackgroundResource(R.drawable.ic_ticket_circle_background_taxi);
-                    //DrawableCompat.setTint(ticketBackground, R.color.color_bg_taxi);
 
                     break;
 
                 case FOOD:
                     holder.imageCategory.setImageResource(R.drawable.ic_restaurant_black_24dp);
-                    holder.imageCategory.setBackgroundResource(R.drawable.ic_ticket_circle_background_food);
+
                     break;
 
                 case LODGING:
-                    holder.imageCategory.setImageResource(R.drawable.ic_train_black_24dp);
-                    holder.imageCategory.setBackgroundResource(R.drawable.ic_ticket_circle_background_lodging);
+                    holder.imageCategory.setImageResource(R.drawable.ic_hotel_black_24dp);
 
                     break;
 
                 case TRANSPORT:
                     holder.imageCategory.setImageResource(R.drawable.ic_train_black_24dp);
-                    holder.imageCategory.setBackgroundResource(R.drawable.ic_ticket_circle_background_transport);
 
                     break;
 
                 case OTHER:
-                    holder.imageCategory.setImageResource(R.drawable.ic_train_black_24dp);
-                    holder.imageCategory.setBackgroundResource(R.drawable.ic_ticket_circle_background_other);
+                    holder.imageCategory.setImageResource(R.drawable.ic_redeem_black_24dp);
 
                     break;
 
                 default:
-                    holder.imageCategory.setImageResource(R.drawable.ic_reorder_black_24dp);
-                    holder.imageCategory.setBackgroundResource(R.drawable.ic_ticket_circle_background_other);
+                    holder.imageCategory.setImageResource(R.drawable.ic_redeem_black_24dp);
 
                     break;
             }

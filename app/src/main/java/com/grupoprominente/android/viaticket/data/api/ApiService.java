@@ -2,6 +2,7 @@ package com.grupoprominente.android.viaticket.data.api;
 
 
 
+import com.grupoprominente.android.viaticket.models.Ticket;
 import com.grupoprominente.android.viaticket.models.Trip;
 import com.grupoprominente.android.viaticket.models.User;
 
@@ -20,6 +21,9 @@ public interface ApiService
 
     @HTTP(method = "GET", path = "Viajes")
     Call<ArrayList<Trip>> getTripsByUsername(@Query("username") String username);
+
+    @HTTP(method = "POST", path = "Tickets", hasBody = true)
+    Call<String> sendTickets(@Body ArrayList<Ticket> tickets);
 //
 //    @HTTP(method = "POST", path = "Usuario/RecuperarPassword", hasBody = true)
 //    Call<GenericResponse> recoverPassword(@Body HashMap<String, String> user);
