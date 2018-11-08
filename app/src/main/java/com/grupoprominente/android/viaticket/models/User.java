@@ -1,6 +1,9 @@
 package com.grupoprominente.android.viaticket.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
+
+import java.io.Serializable;
 
 public class User {
     @SerializedName("Username")

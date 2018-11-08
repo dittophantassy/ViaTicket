@@ -13,14 +13,26 @@
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbarlayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/appbarlayout">
+            android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
+                android:layout_height="?attr/actionBarSize">
+
+                <ImageButton
+                    android:id="@+id/imgBtnAction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@null"
+                    android:tint="@color/colorWhite"
+                    android:src="@drawable/ic_send_black_24dp"
+                    android:paddingRight="16dp"
+                    />
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -34,7 +46,6 @@
                 android:id="@+id/rv_tickets"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
 
         </LinearLayout>
 
@@ -55,7 +66,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/menu_main" />
+        app:menu="@menu/menu_main"
+        />
 
 </android.support.v4.widget.DrawerLayout>
 

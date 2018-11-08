@@ -13,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.grupoprominente.android.viaticket.constants.ApiConstants;
+import com.grupoprominente.android.viaticket.models.Ticket;
 import com.grupoprominente.android.viaticket.models.Trip;
 import com.grupoprominente.android.viaticket.models.User;
 
@@ -66,6 +67,25 @@ public class RestApi
         }
 
         return tripsByUser;
+    }
+
+     public String sendTickets(ArrayList<Ticket> tickets)
+    {
+        String genericResponse = null;
+
+        try
+        {
+            Retrofit retrofit = buildRetrofit();
+            ApiService apiService = retrofit.create(ApiService.class);
+            Call<String> sendTickets = apiService.sendTickets(tickets);
+            genericResponse = sendTickets.execute().body();
+        }
+        catch(Exception e)
+        {
+            String a = "";
+        }
+
+        return genericResponse;
     }
 
 //    public GenericResponse signUp(HashMap<String, String> userData)

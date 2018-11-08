@@ -21,12 +21,17 @@ import android.widget.Button;
 
 
 import com.grupoprominente.android.viaticket.R;
+import com.grupoprominente.android.viaticket.models.CurrencyType;
 import com.grupoprominente.android.viaticket.models.Ticket;
+import com.grupoprominente.android.viaticket.models.TicketType;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class TicketActivity extends AppCompatActivity {
@@ -38,6 +43,7 @@ public class TicketActivity extends AppCompatActivity {
 
     private Ticket ticket;
     private String mCurrentPhotoPath;
+ private int tripId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,7 @@ public class TicketActivity extends AppCompatActivity {
 
         if(extras != null) {
             ticketId = extras.getLong("ID");
+            tripId = extras.getInt("tripId");
             setTitle("Editar Ticket");
         }
 
@@ -102,10 +109,18 @@ public class TicketActivity extends AppCompatActivity {
         if(ticket == null)
             ticket = new Ticket();
 
-        //ticket.setAmount(etNewTicketDesc.getText().toString());
+        Ticket t1 = new Ticket();
+        t1.setIdTrip(tripId);
 
-        ticket.setAmount(Double.parseDouble(etNewTicketAmount.getText().toString()));
-        ticket.save();
+        Random rand = new Random();
+
+        int randomNum = rand.nextInt((4 - 0) + 1) + 0;
+        t1.setTicketType(TicketType.values()[randomNum]);
+        t1.setCurrency(CurrencyType.PESO);
+        t1.setIssueDate(new Date());
+
+        t1.setAmount(Double.parseDouble(etNewTicketAmount.getText().toString()));
+        t1.save();
 
         finish();
     }
