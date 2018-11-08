@@ -4,10 +4,11 @@
     <string name="session_logged_user_key">logged_user_key</string>
 
 
-    <string name="login_activity_user">User</string>
-    <string name="login_activity_pass">Pass</string>
+    <string name="login_activity_user">Usuario</string>
+    <string name="login_activity_pass">Contraseña</string>
     <string name="login_activity_login">Login</string>
-    <string name="main_activity_logout">Logout</string>
+    <string name="main_activity_logout">Cerrar sesión</string>
+    <string name="main_activity_my_trips">Mis viajes</string>
 
 
     <string-array name="CurrencyTypes">

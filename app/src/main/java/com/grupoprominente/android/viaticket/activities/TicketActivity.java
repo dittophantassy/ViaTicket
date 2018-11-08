@@ -1,5 +1,6 @@
 package com.grupoprominente.android.viaticket.activities;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -24,6 +26,7 @@ import com.grupoprominente.android.viaticket.models.TicketType;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -40,9 +43,11 @@ public class TicketActivity extends AppCompatActivity {
     private EditText etAmount;
     private Spinner spnCurrency;
     private Spinner spnTypes;
+    private EditText txtIssued;
+    private Calendar myCalendar;
+    DatePickerDialog.OnDateSetListener dateListener;
     private Uri mCurrentPhotoPath;
     private Uri mTempPhotoPath;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,33 @@ public class TicketActivity extends AppCompatActivity {
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnTypes.setAdapter(typeAdapter);
 
+        txtIssued = (EditText) findViewById(R.id.txtIssued);
+        myCalendar = Calendar.getInstance();
+        myCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        updateLabel();
+
+
+        dateListener = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
+        txtIssued.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(TicketActivity.this, dateListener, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
         imageButton = (ImageButton) this.findViewById(R.id.btnPhoto);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +152,13 @@ public class TicketActivity extends AppCompatActivity {
                 imageButton.setImageURI(mCurrentPhotoPath);
             }
         }
+    }
+
+    private void updateLabel() {
+        String myFormat = "dd/MM/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        txtIssued.setText(sdf.format(myCalendar.getTime()));
     }
 
     private void save()

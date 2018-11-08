@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+    <color name="colorTicketTypeIcon">#CCCCCC</color>
+    <color name="color_bg_taxi">#fa983a</color>
+    <color name="color_bg_transport">#e55039</color>
+    <color name="color_bg_food">#38ada9</color>
+    <color name="color_bg_lodging">#60a3bc</color>
+    <color name="color_bg_other">#4a69bd</color>
 </resources>

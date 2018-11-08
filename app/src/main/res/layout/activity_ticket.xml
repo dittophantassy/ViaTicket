@@ -6,17 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".activities.TicketActivity"
     android:orientation="vertical"
+    android:layout_marginLeft="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginEnd="16dp"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
         <EditText
             android:id="@+id/txtAmount"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="48dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="monto"
             android:digits="0123456789."
@@ -27,11 +30,12 @@
 
         <Spinner
             android:id="@+id/spnCurrency"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
             android:ems="10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -41,17 +45,33 @@
 
 
     </LinearLayout>
+
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="130dp"
+            android:id="@+id/txtIssued"
+            android:focusable="false"
+            android:inputType="none"
+            android:clickable="false"
+            />
 
         <Spinner
 
             android:id="@+id/spnTicketType"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:ems="10"
-            android:inputType="textPersonName"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:ems="10" />
     </LinearLayout>
 
 
@@ -60,8 +80,6 @@
         android:id="@+id/btnPhoto"
         android:layout_height="100dp"
         android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="0dp"
         android:src="@drawable/ic_photo_camera_black_24dp"
         android:scaleType="fitCenter"
@@ -72,9 +90,9 @@
         android:id="@+id/btnOK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="aceptar"
-        android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPhoto"/>
+        android:layout_gravity="bottom"
+        />
 
 </LinearLayout>
