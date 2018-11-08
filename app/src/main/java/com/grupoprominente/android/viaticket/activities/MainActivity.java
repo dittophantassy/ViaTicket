@@ -152,8 +152,42 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemLongClick(View v, int position) {
+            public void onItemLongClick(View v, final int position) {
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_NoActionBar);
+                } else {
+                    builder = new AlertDialog.Builder(MainActivity.this);
+                }
 
+                /*final CharSequence[] items = new CharSequence[(selectedTrip == null) ? trips.size() : trips.size() - 1];
+                for (int i = 0; i < items.length; i ++) {
+                    if (selectedTrip != null) {
+                        if(selectedTrip.getIdTrip() != trips.get(i).getIdTrip())
+                            items[i] = trips.get(i).toString();
+                    }
+                    else items[i] = trips.get(i).toString();
+                }*/
+
+                builder.setTitle("Eliminar Ticket?")
+                        //.setSingleChoiceItems(items, 0, null)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Ticket t = adapter.getItems().get(position);
+                                t.delete();
+                                
+                                LoadMenuItemsTask loadMenuItemsTask = new LoadMenuItemsTask("dperalta");
+                                loadMenuItemsTask.execute();
+
+                                loadTickets();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .show();
             }
         });
         rvTickets.setAdapter(adapter);
@@ -246,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         if(adapter.getItemCount() > 0) {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar);
             } else {
                 builder = new AlertDialog.Builder(this);
             }
@@ -272,12 +306,12 @@ public class MainActivity extends AppCompatActivity {
     private void showMoveTickets(final ArrayList<Ticket> tickets) {
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar);
         } else {
             builder = new AlertDialog.Builder(this);
         }
 
-        final CharSequence[] items = new CharSequence[(selectedTrip != null) ? trips.size() : trips.size() - 1];
+        final CharSequence[] items = new CharSequence[(selectedTrip == null) ? trips.size() : trips.size() - 1];
         for (int i = 0; i < items.length; i ++) {
             if (selectedTrip != null) {
                 if(selectedTrip.getIdTrip() != trips.get(i).getIdTrip())
@@ -306,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
     private void moveTickets(final ArrayList<Ticket> tickets, final Trip trip) {
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar);
         } else {
             builder = new AlertDialog.Builder(this);
         }

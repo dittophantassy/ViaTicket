@@ -1,9 +1,7 @@
 package com.grupoprominente.android.viaticket.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 
 import android.support.annotation.NonNull;
@@ -23,7 +21,7 @@ import com.grupoprominente.android.viaticket.models.Ticket;
 public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAdapter.TicketViewHolder> {
     private MyRecyclerAdapterClickListener clickListener;
 
-    protected static class TicketViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    protected static class TicketViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private MyRecyclerAdapterClickListener clickListener;
 
         View view;
@@ -40,8 +38,11 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
 
             view = itemView;
 
+
             clickListener = listener;
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+            itemView.setLongClickable(true);
             imageCategory = itemView.findViewById(R.id.tv_ticket_imgCategory);
             txtCategory = itemView.findViewById(R.id.tv_ticket_txtCategory);
             txtAmount = itemView.findViewById(R.id.tv_ticket_txtAmount);
@@ -54,6 +55,12 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
         public void onClick(View v) {
             clickListener.onItemClick(v, getLayoutPosition());
         }
+
+        @Override
+        public boolean onLongClick(View v){
+            clickListener.onItemLongClick(v, getLayoutPosition());
+            return true;
+        }
     }
 
     public MyRecyclerAdapter(MyRecyclerAdapterClickListener listener) {
@@ -63,7 +70,7 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
     @NonNull
     @Override
     public TicketViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ticket_rv_item_new, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ticket_rv_item, parent, false);
         return new TicketViewHolder(v, clickListener);
     }
 

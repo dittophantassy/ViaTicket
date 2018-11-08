@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.grupoprominente.android.viaticket.R;
 import com.grupoprominente.android.viaticket.data.api.RestApi;
@@ -28,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_new);
+        setContentView(R.layout.activity_login);
 
         txtUser = findViewById(R.id.txtUser);
         txtPassword = findViewById(R.id.txtPassword);
