@@ -136,9 +136,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        LoadMenuItemsTask loadMenuItemsTask = new LoadMenuItemsTask("dperalta");
-        loadMenuItemsTask.execute();
-
         RecyclerView rvTickets = findViewById(R.id.rv_tickets);
         rvTickets.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyRecyclerAdapter(new MyRecyclerAdapterClickListener() {
