@@ -15,7 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.grupoprominente.android.viaticket.R;
+import com.grupoprominente.android.viaticket.application.Global;
 import com.grupoprominente.android.viaticket.data.api.RestApi;
+import com.grupoprominente.android.viaticket.data.serialization.UserSerializer;
 import com.grupoprominente.android.viaticket.models.User;
 
 public class LoginActivity extends AppCompatActivity {
@@ -39,24 +41,7 @@ public class LoginActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String user = txtUser.getText().toString();
-                        String password = txtPassword.getText().toString();
-
                         login();
-//                        if (!user.equals("Juan") && !password.equals("123")) {
-//                            Toast.makeText(LoginActivity.this, "Usario y/o contraseña no válidos.", Toast.LENGTH_SHORT).show();
-//                        } else {
-//
-//                            SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(getString(R.string.session_shared_preferences), Context.MODE_PRIVATE);
-//                            SharedPreferences.Editor editor = sharedPref.edit();
-//                            editor.putString(getString(R.string.session_logged_user_key), user);
-//                            editor.commit();
-//
-//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//
-//                            startActivity(intent);
-//                            finish();
-//                        }
                     }
                 }
         );
@@ -67,13 +52,11 @@ public class LoginActivity extends AppCompatActivity {
             loginTask = new LoginTask(txtUser.getText().toString(), txtPassword.getText().toString());
             loginTask.execute();
         } else {
-            //Snackbar.make(findViewById(android.R.id.content), R.string.must_type_email_password, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(android.R.id.content), "Ingrese usuario y contraseña", Snackbar.LENGTH_SHORT).show();
         }
     }
 
-    private void startHomeActivity() {
-
-
+    private void startMainActivity() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 
         startActivity(intent);
@@ -100,13 +83,8 @@ public class LoginActivity extends AppCompatActivity {
             User user = RestApi.getInstance().login(username, password);
 
             if (user != null) {
-                SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(getString(R.string.session_shared_preferences), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(getString(R.string.session_logged_user_key), user.getUsername());
-                editor.commit();
-
-                // user.setPassword(password);
-                // UserSerializer.getInstance().save(LoginActivity.this, user);
+                user.setPassword(password);
+                UserSerializer.getInstance().save(LoginActivity.this, user);
             }
 
             return user;
@@ -117,18 +95,18 @@ public class LoginActivity extends AppCompatActivity {
             pbLogin.setVisibility(View.GONE);
 
             if (user != null && user.getCode() == 0) {
-                startHomeActivity();
+                startMainActivity();
             } else {
                 btnLogin.setVisibility(View.VISIBLE);
 
                 if (user != null) {
                     Snackbar.make(findViewById(android.R.id.content), "Nombre de usuario o password incorrecto", Snackbar.LENGTH_SHORT).show();
                 } else {
-//                    if (AppInfo.connected) {
-//                        Snackbar.make(findViewById(android.R.id.content), R.string.error_bad_connection_quality, Snackbar.LENGTH_SHORT).show();
-//                    } else {
-//                        Snackbar.make(findViewById(android.R.id.content), R.string.error_connection, Snackbar.LENGTH_SHORT).show();
-//                    }
+                    if (Global.isConnected) {
+                        Snackbar.make(findViewById(android.R.id.content), "Se produjo un error de conexión al servidor", Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        Snackbar.make(findViewById(android.R.id.content), "No hay conexión a internet", Snackbar.LENGTH_SHORT).show();
+                    }
                 }
             }
 

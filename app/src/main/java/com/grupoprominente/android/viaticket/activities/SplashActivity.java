@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.grupoprominente.android.viaticket.R;
+import com.grupoprominente.android.viaticket.data.serialization.UserSerializer;
+import com.grupoprominente.android.viaticket.models.User;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -14,17 +16,15 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPref = SplashActivity.this.getSharedPreferences(getString(R.string.session_shared_preferences), Context.MODE_PRIVATE);
+        User user = UserSerializer.getInstance().load(this);
         Intent intent;
-        if (sharedPref.getString(getString(R.string.session_logged_user_key), null)==null ){
+
+        if(user == null)
             intent = new Intent(this, LoginActivity.class);
-        }
-        else {
+        else
             intent = new Intent(this, MainActivity.class);
-        }
 
         startActivity(intent);
         finish();
-
     }
 }
