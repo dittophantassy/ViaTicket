@@ -1,9 +1,7 @@
 package com.grupoprominente.android.viaticket.activities;
-
-import android.content.Context;
+;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -38,6 +36,7 @@ import com.grupoprominente.android.viaticket.data.api.response.TripResponse;
 import com.grupoprominente.android.viaticket.data.serialization.UserSerializer;
 import com.grupoprominente.android.viaticket.models.Ticket;
 import com.grupoprominente.android.viaticket.models.Trip;
+import com.grupoprominente.android.viaticket.models.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -56,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Trip> trips;
     private Trip selectedTrip;
+
+    private User loggedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,9 +130,7 @@ public class MainActivity extends AppCompatActivity {
                                 Ticket t = adapter.getItems().get(position);
                                 t.delete();
 
-                                LoadMenuItemsTask loadMenuItemsTask = new LoadMenuItemsTask("dperalta");
-                                loadMenuItemsTask.execute();
-
+                                loadMenu();
                                 loadTickets();
                             }
                         })
@@ -157,16 +156,16 @@ public class MainActivity extends AppCompatActivity {
         );
 
         selectMenuItem(navigationView.getMenu().getItem(0));
+
+        loggedUser = UserSerializer.getInstance().load(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        LoadMenuItemsTask loadMenuItemsTask = new LoadMenuItemsTask("dperalta");
-        loadMenuItemsTask.execute();
-
-        loadTickets();
+       loadMenu();
+       loadTickets();
     }
 
     @Override
@@ -179,6 +178,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void loadMenu() {
+        LoadMenuItemsTask loadMenuItemsTask = new LoadMenuItemsTask(loggedUser.getUsername());
+        loadMenuItemsTask.execute();
+    }
 
     private void selectMenuItem(MenuItem menuItem) {
         mDrawerLayout.closeDrawers();

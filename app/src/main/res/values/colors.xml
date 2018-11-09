@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#02597D</color>
     <color name="colorSecondary">#FDC353</color>
+    <color name="colorGrayMenu">#C1C1C1</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTicketTypeIcon">#CCCCCC</color>
 </resources>
