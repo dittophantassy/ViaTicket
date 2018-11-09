@@ -3,11 +3,26 @@
     <string name="session_shared_preferences">com.grupoprominente.android.viaticket.session_file_key</string>
     <string name="session_logged_user_key">logged_user_key</string>
 
-
     <string name="login_activity_user">Usuario</string>
     <string name="login_activity_pass">Contraseña</string>
+    <string name="login_activity_enter_user_pass">Ingrese usuario y contraseña</string>
+    <string name="login_activity_wrong_user_pass">Nombre de usuario o password incorrecto</string>
+    <string name="login_activity_login">Login</string>
+
     <string name="main_activity_logout">Cerrar sesión</string>
     <string name="main_activity_my_trips">Mis viajes</string>
+    <string name="main_activity_ask_delete_ticket">Eliminar Ticket?</string>
+    <string name="main_activity_send_tickets">Rendir tickets</string>
+    <string name="main_activity_confirm_send_tickets">¿Confirma rendición de tickets al viaje %s?</string>
+    <string name="main_activity_move_tickets">Mover tickets</string>
+    <string name="main_activity_confirm_move_tickets">¿Confirma mover tickets al viaje %s?</string>
+    <string name="main_activity_error_fetching_trips">Se produjo un error al consultar viajes</string>
+    <string name="main_activity_error_synchronizing_tickets">Se produjo un error al sincronizar tickets</string>
+    <string name="main_activity_confirm_logout">¿Confirma cerrar sesión</string>
+
+    <string name="ticket_activity_edit_title">Editar Ticket</string>
+    <string name="ticket_activity_create_title">Crear Ticket</string>
+
     <string name="unassigned_tickets">Tickets sin asignar</string>
 
     <string name="currency_peso" >Peso</string>
@@ -21,5 +36,18 @@
 
     <string name="currency_peso_format" >$ %1$.2f</string>
     <string name="currency_dollar_format" >US$ %1$.2f</string>
+    <string name="currency_none_format" >%1$.2f</string>
+
+    <string name="error_no_server_connection">Se produjo un error de conexión al servidor</string>
+    <string name="error_no_internet">No hay conexión a internet</string>
+
+    <string name="dialog_yes">Sí</string>
+    <string name="dialog_no">No</string>
+
+    <string name="field_amount">monto</string>
+    <string name="field_date">fecha</string>
+    <string name="field_cid">CID</string>
+    <string name="button_accept">aceptar</string>
+
 
 </resources>

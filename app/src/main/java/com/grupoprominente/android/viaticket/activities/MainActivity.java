@@ -1,5 +1,5 @@
 package com.grupoprominente.android.viaticket.activities;
-;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -45,7 +45,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
     private MyRecyclerAdapter adapter;
     private DrawerLayout mDrawerLayout;
     private MenuItem mPreviousMenuItem;
@@ -62,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        recyclerView = findViewById(R.id.rv_tickets);
-        //pbMain = findViewById(R.id.pbMain);
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -124,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     builder = new AlertDialog.Builder(MainActivity.this);
                 }
 
-                builder.setTitle("Eliminar Ticket?")
+                builder.setTitle(R.string.main_activity_ask_delete_ticket)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Ticket t = adapter.getItems().get(position);
@@ -245,8 +241,8 @@ public class MainActivity extends AppCompatActivity {
                 builder = new AlertDialog.Builder(this);
             }
 
-            builder.setTitle("Rendir tickets")
-                    .setMessage(String.format("¿Confirma rendición de tickets al viaje %s?", selectedTrip.getDestination()))
+            builder.setTitle(R.string.main_activity_send_tickets)
+                    .setMessage(String.format(getString(R.string.main_activity_confirm_send_tickets), selectedTrip.getDestination()))
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             SendTicketsItemsTask sendTicketsItemsTask = new SendTicketsItemsTask();
@@ -297,8 +293,8 @@ public class MainActivity extends AppCompatActivity {
             builder = new AlertDialog.Builder(this);
         }
 
-        builder.setTitle("Mover tickets")
-                .setMessage(String.format("¿Confirma mover tickets al viaje %s?", trip.getDestination()))
+        builder.setTitle(R.string.main_activity_move_tickets)
+                .setMessage(String.format(getString(R.string.main_activity_confirm_move_tickets), trip.getDestination()))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         for (Ticket ticket : tickets) {
@@ -346,12 +342,12 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 if (response != null) {
-                    Snackbar.make(findViewById(android.R.id.content), "Se produjo un error al consultar viajes", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(android.R.id.content), R.string.main_activity_error_fetching_trips, Snackbar.LENGTH_SHORT).show();
                 } else {
                     if (Global.isConnected) {
-                        Snackbar.make(findViewById(android.R.id.content), "Se produjo un error de conexión al servidor", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(android.R.id.content), R.string.error_no_server_connection, Snackbar.LENGTH_SHORT).show();
                     } else {
-                        Snackbar.make(findViewById(android.R.id.content), "No hay conexión a internet", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(android.R.id.content), R.string.error_no_internet, Snackbar.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -363,13 +359,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             btnAction.setClickable(false);
-            //recyclerView.setVisibility(View.GONE);
-          //  pbMain.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected TicketResponse doInBackground(Void ...voids) {
-            TicketResponse response = null;
+            TicketResponse response;
 
             for (Ticket ticket : adapter.getItems()) {
                 if (ticket.getImageFile() != null && !ticket.getImageFile().isEmpty()) {
@@ -378,8 +372,6 @@ public class MainActivity extends AppCompatActivity {
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
                         ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-                       // bitmap.compress(Bitmap.CompressFormat.JPEG, 30, byteArray);
-                        //ticket.setImage(byteArray.toByteArray());
 
                     } catch (IOException ex) {
                     }
@@ -400,27 +392,25 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 if (response != null) {
-                    Snackbar.make(findViewById(android.R.id.content), "Se produjo un error al sincronizar tickets", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(android.R.id.content), R.string.main_activity_error_synchronizing_tickets, Snackbar.LENGTH_SHORT).show();
                 } else {
                     if (Global.isConnected) {
-                        Snackbar.make(findViewById(android.R.id.content), "Se produjo un error de conexión al servidor", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(android.R.id.content), R.string.error_no_server_connection, Snackbar.LENGTH_SHORT).show();
                     } else {
-                        Snackbar.make(findViewById(android.R.id.content), "No hay conexión a internet", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(android.R.id.content), R.string.error_no_internet, Snackbar.LENGTH_SHORT).show();
                     }
                 }
             }
 
             btnAction.setClickable(true);
-            //recyclerView.setVisibility(View.VISIBLE);
-            //  pbMain.setVisibility(View.GONE);
         }
     }
 
     private void logout()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("¿Confirma cerrar sesión");
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.main_activity_confirm_logout);
+        builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
@@ -429,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        builder.setNegativeButton("No", null);
+        builder.setNegativeButton(R.string.dialog_no, null);
         builder.show();
     }
 
