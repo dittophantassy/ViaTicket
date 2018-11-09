@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Ticket t = adapter.getItems().get(position);
                                 t.delete();
-                                
+
                                 LoadMenuItemsTask loadMenuItemsTask = new LoadMenuItemsTask("dperalta");
                                 loadMenuItemsTask.execute();
 

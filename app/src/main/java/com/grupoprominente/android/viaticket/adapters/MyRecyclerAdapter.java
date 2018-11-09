@@ -79,12 +79,17 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
     public void onBindViewHolder(@NonNull TicketViewHolder holder, int position) {
         Ticket t = getItems().get(position);
         if (t.getTicketType()!=null)
-            holder.txtCategory.setText(t.getTicketType().toString());
+            holder.txtCategory.setText(t.getTicketType().getResource());
         if (t.getIssueDate()!=null)
             holder.txtIssueDate.setText(holder.dateFormat.format("dd/MM", t.getIssueDate()));
-        holder.txtAmount.setText(t.getAmount().toString());
-
-        Drawable ticketBackground = holder.imageCategory.getBackground();
+        switch (t.getCurrency())
+        {
+            case PESO: holder.txtAmount.setText(holder.view.getContext().getString(R.string.currency_peso_format, t.getAmount()));
+                break;
+            case DOLLAR: holder.txtAmount.setText(holder.view.getContext().getString(R.string.currency_dollar_format, t.getAmount()));
+                break;
+            default:  holder.txtAmount.setText(t.getAmount().toString());
+        }
 
         if (t.getTicketType() != null) {
             switch (t.getTicketType()) {
