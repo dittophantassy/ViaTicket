@@ -1,18 +1,18 @@
 package com.grupoprominente.android.viaticket.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.orm.SugarRecord;
 
 import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 3606451276155312032L;
+
     @SerializedName("Username")
     private String username;
     @SerializedName("Password")
     private String password;
     @SerializedName("Code")
     private int code;
-    private int currentTripId;
 
     public String getUsername() {
         return username;
@@ -38,11 +38,4 @@ public class User {
         this.code = code;
     }
 
-    public int getCurrentTripId() {
-        return currentTripId;
-    }
-
-    public void setCurrentTripId(int currentTripId) {
-        this.currentTripId = currentTripId;
-    }
 }

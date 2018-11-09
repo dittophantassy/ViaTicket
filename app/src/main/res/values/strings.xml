@@ -6,11 +6,8 @@
 
     <string name="login_activity_user">Usuario</string>
     <string name="login_activity_pass">Contraseña</string>
-    <string name="login_activity_login">Login</string>
     <string name="main_activity_logout">Cerrar sesión</string>
     <string name="main_activity_my_trips">Mis viajes</string>
     <string name="unassigned_tickets">Tickets sin asignar</string>
-    <string name="toolbar_action_label_assign">Asignar</string>
-    <string name="toolbar_action_label_pay">Rendir</string>
 
 </resources>

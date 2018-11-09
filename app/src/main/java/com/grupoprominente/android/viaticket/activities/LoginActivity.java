@@ -1,8 +1,6 @@
 package com.grupoprominente.android.viaticket.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.grupoprominente.android.viaticket.R;
 import com.grupoprominente.android.viaticket.application.Global;
 import com.grupoprominente.android.viaticket.data.api.RestApi;
+import com.grupoprominente.android.viaticket.data.api.response.UserResponse;
 import com.grupoprominente.android.viaticket.data.serialization.UserSerializer;
-import com.grupoprominente.android.viaticket.models.User;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText txtUser;
@@ -30,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_new);
+        setContentView(R.layout.activity_login);
 
         txtUser = findViewById(R.id.txtUser);
         txtPassword = findViewById(R.id.txtPassword);
@@ -63,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private class LoginTask extends AsyncTask<Void, Integer, User> {
+    private class LoginTask extends AsyncTask<Void, Integer, UserResponse> {
         private String username;
         private String password;
 
@@ -79,27 +76,27 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected User doInBackground(Void... voids) {
-            User user = RestApi.getInstance().login(username, password);
+        protected UserResponse doInBackground(Void... voids) {
+            UserResponse response = RestApi.getInstance().login(username, password);
 
-            if (user != null) {
-                user.setPassword(password);
-                UserSerializer.getInstance().save(LoginActivity.this, user);
+            if (response != null && response.getUser() != null) {
+                response.getUser().setPassword(password);
+                UserSerializer.getInstance().save(LoginActivity.this, response.getUser());
             }
 
-            return user;
+            return response;
         }
 
         @Override
-        protected void onPostExecute(User user) {
+        protected void onPostExecute(UserResponse response) {
             pbLogin.setVisibility(View.GONE);
 
-            if (user != null && user.getCode() == 0) {
+            if (response != null && response.getCode() == 0) {
                 startMainActivity();
             } else {
                 btnLogin.setVisibility(View.VISIBLE);
 
-                if (user != null) {
+                if (response != null) {
                     Snackbar.make(findViewById(android.R.id.content), "Nombre de usuario o password incorrecto", Snackbar.LENGTH_SHORT).show();
                 } else {
                     if (Global.isConnected) {

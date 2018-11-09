@@ -1,9 +1,7 @@
 package com.grupoprominente.android.viaticket.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 
 import android.support.annotation.NonNull;
@@ -63,7 +61,7 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
     @NonNull
     @Override
     public TicketViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ticket_rv_item_new, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ticket_rv_item, parent, false);
         return new TicketViewHolder(v, clickListener);
     }
 

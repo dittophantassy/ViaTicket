@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -27,14 +31,17 @@ import android.widget.ProgressBar;
 import com.grupoprominente.android.viaticket.R;
 import com.grupoprominente.android.viaticket.adapters.MyRecyclerAdapter;
 import com.grupoprominente.android.viaticket.adapters.MyRecyclerAdapterClickListener;
+import com.grupoprominente.android.viaticket.application.Global;
 import com.grupoprominente.android.viaticket.data.api.RestApi;
-import com.grupoprominente.android.viaticket.models.CurrencyType;
+import com.grupoprominente.android.viaticket.data.api.response.TicketResponse;
+import com.grupoprominente.android.viaticket.data.api.response.TripResponse;
 import com.grupoprominente.android.viaticket.models.Ticket;
-import com.grupoprominente.android.viaticket.models.TicketType;
 import com.grupoprominente.android.viaticket.models.Trip;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -204,10 +211,10 @@ public class MainActivity extends AppCompatActivity {
             this.username = username;
         }
 
-
         @Override
         protected ArrayList<Trip> doInBackground(Void... voids) {
-            trips = RestApi.getInstance().getTripsByUsername(username);
+            TripResponse response = RestApi.getInstance().getTripsByUsername(username);
+            trips = response.getTrips();
 
             return trips;
         }
@@ -243,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void synchronizeTickets() {
-        if(adapter.getItemCount() > 0) {
+        if (adapter.getItemCount() > 0) {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
@@ -278,28 +285,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
         final CharSequence[] items = new CharSequence[(selectedTrip != null) ? trips.size() : trips.size() - 1];
-        for (int i = 0; i < items.length; i ++) {
+        for (int i = 0; i < items.length; i++) {
             if (selectedTrip != null) {
-                if(selectedTrip.getIdTrip() != trips.get(i).getIdTrip())
+                if (selectedTrip.getIdTrip() != trips.get(i).getIdTrip())
                     items[i] = trips.get(i).toString();
-            }
-            else items[i] = trips.get(i).toString();
+            } else items[i] = trips.get(i).toString();
         }
 
         builder.setTitle("Mover tickets")
                 .setSingleChoiceItems(items, 0, null)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        ListView lw = ((AlertDialog)dialog).getListView();
+                        ListView lw = ((AlertDialog) dialog).getListView();
 
                         moveTickets(tickets, trips.get(lw.getCheckedItemPosition()));
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
-                        }
-                    })
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
                 .show();
     }
 
@@ -332,34 +338,61 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    private class SendTicketsItemsTask extends AsyncTask<Void, Integer, Void> {
+    private class SendTicketsItemsTask extends AsyncTask<Void, Integer, TicketResponse> {
 
         @Override
         protected void onPreExecute() {
             btnAction.setClickable(false);
             //recyclerView.setVisibility(View.GONE);
-          //  pbMain.setVisibility(View.VISIBLE);
+            //  pbMain.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
-            RestApi.getInstance().sendTickets(adapter.getItems());
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void v) {
-            btnAction.setClickable(true);
+        protected TicketResponse doInBackground(Void ...voids) {
+            TicketResponse response = null;
 
             for (Ticket ticket : adapter.getItems()) {
-                Ticket.delete(ticket);
+                if (ticket.getImageFile() != null && !ticket.getImageFile().isEmpty()) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(Uri.parse(ticket.getImageFile()));
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+                        ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                       // bitmap.compress(Bitmap.CompressFormat.JPEG, 30, byteArray);
+                        //ticket.setImage(byteArray.toByteArray());
+
+                    } catch (IOException ex) {
+                    }
+                }
             }
 
-            adapter.clear();
+            response = RestApi.getInstance().sendTickets(adapter.getItems());
+            return response;
+        }
 
+        @Override
+        protected void onPostExecute(TicketResponse response) {
+            if (response != null && response.getCode() == 0) {
+                for (Ticket ticket : adapter.getItems()) {
+                    Ticket.delete(ticket);
+                }
+                adapter.clear();
+            }
+            else {
+                if (response != null) {
+                    Snackbar.make(findViewById(android.R.id.content), "Se produjo un error al sincronizar tickets", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    if (Global.isConnected) {
+                        Snackbar.make(findViewById(android.R.id.content), "Se produjo un error de conexión al servidor", Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        Snackbar.make(findViewById(android.R.id.content), "No hay conexión a internet", Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            btnAction.setClickable(true);
             //recyclerView.setVisibility(View.VISIBLE);
-          //  pbMain.setVisibility(View.GONE);
+            //  pbMain.setVisibility(View.GONE);
         }
     }
 
