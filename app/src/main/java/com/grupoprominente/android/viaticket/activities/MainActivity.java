@@ -42,6 +42,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -329,12 +330,19 @@ public class MainActivity extends AppCompatActivity {
             NavigationView navigationView = findViewById(R.id.nav_view);
             Menu tripsMenu = navigationView.getMenu().getItem(1).getSubMenu();
 
+            tripsMenu.clear();
+
             if (response != null && response.getCode() == 0) {
                 if (response.getTrips().size() > 0) {
                     trips = response.getTrips();
-                    tripsMenu.clear();
+
+                    Trip.deleteAll(Trip.class);
+
                     for (int i = 0; i < trips.size(); i++) {
                         Trip currentTrip = trips.get(i);
+
+                        Trip.save(currentTrip);
+
                         MenuItem item = tripsMenu.add(0, i, 0, currentTrip.toString());
                         item.setIcon(R.drawable.ic_flight_black_24dp);
                     }
@@ -350,6 +358,16 @@ public class MainActivity extends AppCompatActivity {
                         Snackbar.make(findViewById(android.R.id.content), R.string.error_no_internet, Snackbar.LENGTH_SHORT).show();
                     }
                 }
+
+                trips.clear();
+                trips.addAll(Trip.listAll(Trip.class));
+
+                for (int i = 0; i < trips.size(); i++) {
+                    Trip currentTrip = trips.get(i);
+
+                    MenuItem item = tripsMenu.add(0, i, 0, currentTrip.toString());
+                    item.setIcon(R.drawable.ic_flight_black_24dp);
+                }
             }
         }
     }
@@ -359,8 +377,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             btnAction.setClickable(false);
-            //recyclerView.setVisibility(View.GONE);
-          //  pbMain.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -374,9 +390,9 @@ public class MainActivity extends AppCompatActivity {
                         InputStream inputStream = getContentResolver().openInputStream(Uri.parse(ticket.getImageFile()));
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-                       // ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-                     //   bitmap.compress(Bitmap.CompressFormat.JPEG, 10, byteArray);
-                   //     ticket.setImage(byteArray.toByteArray());
+                        ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArray);
+                        ticket.setImage(byteArray.toByteArray());
 
                     } catch (IOException ex) {
                         errorAlConvertirImagen = true;
@@ -412,8 +428,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             btnAction.setClickable(true);
-            //recyclerView.setVisibility(View.VISIBLE);
-            //  pbMain.setVisibility(View.GONE);
         }
     }
 
