@@ -370,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected TicketResponse doInBackground(Void ...voids) {
             TicketResponse response = null;
+            boolean errorAlConvertirImagen = false;
 
             for (Ticket ticket : adapter.getItems()) {
                 if (ticket.getImageFile() != null && !ticket.getImageFile().isEmpty()) {
@@ -377,16 +378,20 @@ public class MainActivity extends AppCompatActivity {
                         InputStream inputStream = getContentResolver().openInputStream(Uri.parse(ticket.getImageFile()));
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-                        ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-                       // bitmap.compress(Bitmap.CompressFormat.JPEG, 30, byteArray);
-                        //ticket.setImage(byteArray.toByteArray());
+                       // ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                     //   bitmap.compress(Bitmap.CompressFormat.JPEG, 10, byteArray);
+                   //     ticket.setImage(byteArray.toByteArray());
 
                     } catch (IOException ex) {
+                        errorAlConvertirImagen = true;
+                        break;
                     }
                 }
             }
 
-            response = RestApi.getInstance().sendTickets(adapter.getItems());
+            if(!errorAlConvertirImagen)
+                response = RestApi.getInstance().sendTickets(adapter.getItems());
+
             return response;
         }
 
