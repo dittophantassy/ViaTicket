@@ -4,10 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import com.grupoprominente.android.viaticket.R;
 
 
-/**
- * Created by FCouzo on 13/7/2018.
- */
-
 public enum CurrencyType {
     @SerializedName("1")
     PESO,

@@ -3,9 +3,6 @@ package com.grupoprominente.android.viaticket.models;
 import com.google.gson.annotations.SerializedName;
 import com.grupoprominente.android.viaticket.R;
 
-/**
- * Created by FCouzo on 13/7/2018.
- */
 
 public enum TicketType {
     @SerializedName("1")

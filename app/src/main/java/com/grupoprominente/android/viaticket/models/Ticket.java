@@ -7,9 +7,6 @@ import com.orm.dsl.Table;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by FCouzo on 13/7/2018.
- */
 
 @Table
 public class Ticket extends SugarRecord implements Serializable {

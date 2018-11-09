@@ -23,10 +23,12 @@ import com.grupoprominente.android.viaticket.adapters.TicketTypeAdapter;
 import com.grupoprominente.android.viaticket.models.CurrencyType;
 import com.grupoprominente.android.viaticket.models.Ticket;
 import com.grupoprominente.android.viaticket.models.TicketType;
+import com.grupoprominente.android.viaticket.models.Trip;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -39,11 +41,11 @@ public class TicketActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
     private ImageButton imageButton;
-    private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
     private EditText etAmount;
     private Spinner spnCurrency;
     private Spinner spnTypes;
+    private Spinner spnTrips;
     private EditText txtIssued;
     private Calendar myCalendar;
     DatePickerDialog.OnDateSetListener dateListener;
@@ -63,23 +65,28 @@ public class TicketActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        spnCurrency = (Spinner) findViewById(R.id.spnCurrency);
+        spnCurrency = findViewById(R.id.spnCurrency);
         CurrencyAdapter currencyAdapter = new CurrencyAdapter(this);
         spnCurrency.setAdapter(currencyAdapter);
 
-        spnTypes = (Spinner) findViewById(R.id.spnTicketType);
+        spnTypes = findViewById(R.id.spnTicketType);
         ArrayAdapter<TicketType> typeAdapter = new TicketTypeAdapter(this);
         spnTypes.setAdapter(typeAdapter);
 
-        txtIssued = (EditText) findViewById(R.id.txtIssued);
+        spnTrips = findViewById(R.id.spnTrip);
+        ArrayAdapter<Trip> tripAdapter = new ArrayAdapter<Trip>(this,android.R.layout.simple_spinner_dropdown_item,Trip.listAll(Trip.class));
+        spnTrips.setAdapter(tripAdapter);
+        spnTrips.setVisibility(View.GONE);//TODO
+
+        txtIssued = findViewById(R.id.txtIssued);
         myCalendar = Calendar.getInstance();
         myCalendar.set(Calendar.HOUR_OF_DAY, 0);
 
-        txtCid = (EditText)findViewById(R.id.txtCid);
+        txtCid = findViewById(R.id.txtCid);
 
         updateLabel();
 
-        imageButton = (ImageButton) this.findViewById(R.id.btnPhoto);
+        imageButton = this.findViewById(R.id.btnPhoto);
 
         if(extras != null) {
             ticketId = extras.getLong("ID");
@@ -88,16 +95,19 @@ public class TicketActivity extends AppCompatActivity {
 
             if (ticketId>0)
             {
-                setTitle("Editar Ticket");
+                setTitle(getString(R.string.ticket_activity_edit_title));
                 ticket = Ticket.findById(Ticket.class,ticketId);
 
                 if (ticket.getIssueDate() != null) {
                     myCalendar.setTime(ticket.getIssueDate());
                     updateLabel();
                 }
-                etAmount.setText(ticket.getAmount().toString());
+
+                etAmount.setText(getString(R.string.currency_none_format, ticket.getAmount()));
                 spnCurrency.setSelection(currencyAdapter.getPosition(ticket.getCurrency()));
                 spnTypes.setSelection(typeAdapter.getPosition(ticket.getTicketType()));
+                //if (tripId>0)
+                //    spnTrips.setSelection(tripAdapter.getPosition(Trip.findById(Trip.class, tripId)));
                 if (ticket.getImageFile() != null)
                     mCurrentPhotoPath = Uri.parse(ticket.getImageFile());
 
@@ -163,7 +173,7 @@ public class TicketActivity extends AppCompatActivity {
             }
         });
 
-        Button okButton = (Button) this.findViewById(R.id.btnOK);
+        Button okButton = this.findViewById(R.id.btnOK);
         okButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -190,7 +200,7 @@ public class TicketActivity extends AppCompatActivity {
 
 
     private void updateLabel() {
-        String myFormat = "dd/MM/yy"; //In which you need put here
+        String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         txtIssued.setText(sdf.format(myCalendar.getTime()));
@@ -201,10 +211,11 @@ public class TicketActivity extends AppCompatActivity {
         if(ticket == null)
             ticket = new Ticket();
 
+
         if (tripId>0)
             ticket.setIdTrip(tripId);
 
-        //TODO validar, no dejar al usuario aceptar con un monto vacío (0 creo que debería dejar)
+        //TODO should I allow a zero amount? (in case of a split bill)
         String amount = etAmount.getText().toString();
         if (!amount.isEmpty()){
             ticket.setAmount(Double.parseDouble(etAmount.getText().toString()));
@@ -220,7 +231,7 @@ public class TicketActivity extends AppCompatActivity {
         ticket.setIssueDate(myCalendar.getTime());
         ticket.setCid((!txtCid.getText().toString().isEmpty()) ? txtCid.getText().toString() : cid);
 
-        //TODO es obligatoria la foto?
+        //TODO is the photo a requirement?
         if (mCurrentPhotoPath!= null)
             ticket.setImageFile(mCurrentPhotoPath.toString());
 

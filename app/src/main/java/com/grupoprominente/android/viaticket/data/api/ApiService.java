@@ -6,7 +6,6 @@ import com.grupoprominente.android.viaticket.data.api.response.TicketResponse;
 import com.grupoprominente.android.viaticket.data.api.response.TripResponse;
 import com.grupoprominente.android.viaticket.data.api.response.UserResponse;
 import com.grupoprominente.android.viaticket.models.Ticket;
-import com.grupoprominente.android.viaticket.models.User;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,5 @@
 package com.grupoprominente.android.viaticket.models;
 
-import android.app.Application;
-
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
@@ -62,7 +60,6 @@ public class Trip extends SugarRecord implements Serializable {
 
     @Override
     public String toString() {
-        android.text.format.DateFormat dateFormat = new android.text.format.DateFormat();
-        return destination + " - " + dateFormat.format("dd/MM", tripDate);
+        return destination + " - " + android.text.format.DateFormat.format("dd/MM", tripDate);
     }
 }

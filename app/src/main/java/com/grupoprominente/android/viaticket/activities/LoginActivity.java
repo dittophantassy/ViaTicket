@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             loginTask = new LoginTask(txtUser.getText().toString(), txtPassword.getText().toString());
             loginTask.execute();
         } else {
-            Snackbar.make(findViewById(android.R.id.content), "Ingrese usuario y contraseña", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(android.R.id.content), R.string.login_activity_enter_user_pass, Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -97,12 +97,12 @@ public class LoginActivity extends AppCompatActivity {
                 btnLogin.setVisibility(View.VISIBLE);
 
                 if (response != null) {
-                    Snackbar.make(findViewById(android.R.id.content), "Nombre de usuario o password incorrecto", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(android.R.id.content), R.string.login_activity_wrong_user_pass, Snackbar.LENGTH_SHORT).show();
                 } else {
                     if (Global.isConnected) {
-                        Snackbar.make(findViewById(android.R.id.content), "Se produjo un error de conexión al servidor", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(android.R.id.content), R.string.error_no_server_connection, Snackbar.LENGTH_SHORT).show();
                     } else {
-                        Snackbar.make(findViewById(android.R.id.content), "No hay conexión a internet", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(android.R.id.content), R.string.error_no_internet, Snackbar.LENGTH_SHORT).show();
                     }
                 }
             }

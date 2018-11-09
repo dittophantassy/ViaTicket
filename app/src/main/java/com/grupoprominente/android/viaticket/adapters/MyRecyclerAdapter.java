@@ -1,7 +1,6 @@
 package com.grupoprominente.android.viaticket.adapters;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 
 import android.support.annotation.NonNull;
@@ -14,9 +13,6 @@ import android.widget.TextView;
 import com.grupoprominente.android.viaticket.R;
 import com.grupoprominente.android.viaticket.models.Ticket;
 
-/**
- * Created by FCouzo on 13/7/2018.
- */
 
 public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAdapter.TicketViewHolder> {
     private MyRecyclerAdapterClickListener clickListener;
@@ -80,14 +76,14 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
         if (t.getTicketType()!=null)
             holder.txtCategory.setText(t.getTicketType().getResource());
         if (t.getIssueDate()!=null)
-            holder.txtIssueDate.setText(holder.dateFormat.format("dd/MM", t.getIssueDate()));
+            holder.txtIssueDate.setText(android.text.format.DateFormat.format("dd/MM", t.getIssueDate()));
         switch (t.getCurrency())
         {
             case PESO: holder.txtAmount.setText(holder.view.getContext().getString(R.string.currency_peso_format, t.getAmount()));
                 break;
             case DOLLAR: holder.txtAmount.setText(holder.view.getContext().getString(R.string.currency_dollar_format, t.getAmount()));
                 break;
-            default:  holder.txtAmount.setText(t.getAmount().toString());
+            default:  holder.txtAmount.setText( holder.view.getContext().getString(R.string.currency_none_format, t.getAmount()));
         }
 
         if (t.getTicketType() != null) {
