@@ -36,12 +36,14 @@ import com.grupoprominente.android.viaticket.data.api.RestApi;
 import com.grupoprominente.android.viaticket.data.api.response.TicketResponse;
 import com.grupoprominente.android.viaticket.data.api.response.TripResponse;
 import com.grupoprominente.android.viaticket.models.Ticket;
+import com.grupoprominente.android.viaticket.models.TicketType;
 import com.grupoprominente.android.viaticket.models.Trip;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -159,8 +161,42 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemLongClick(View v, int position) {
+            public void onItemLongClick(View v, final int position) {
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_NoActionBar);
+                } else {
+                    builder = new AlertDialog.Builder(MainActivity.this);
+                }
 
+                /*final CharSequence[] items = new CharSequence[(selectedTrip == null) ? trips.size() : trips.size() - 1];
+                for (int i = 0; i < items.length; i ++) {
+                    if (selectedTrip != null) {
+                        if(selectedTrip.getIdTrip() != trips.get(i).getIdTrip())
+                            items[i] = trips.get(i).toString();
+                    }
+                    else items[i] = trips.get(i).toString();
+                }*/
+
+                builder.setTitle("Eliminar Ticket?")
+                        //.setSingleChoiceItems(items, 0, null)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Ticket t = adapter.getItems().get(position);
+                                t.delete();
+
+                                LoadMenuItemsTask loadMenuItemsTask = new LoadMenuItemsTask("dperalta");
+                                loadMenuItemsTask.execute();
+
+                                loadTickets();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .show();
             }
         });
         rvTickets.setAdapter(adapter);
@@ -250,10 +286,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void synchronizeTickets() {
-        if (adapter.getItemCount() > 0) {
+        if(adapter.getItemCount() > 0) {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar);
             } else {
                 builder = new AlertDialog.Builder(this);
             }
@@ -279,33 +315,34 @@ public class MainActivity extends AppCompatActivity {
     private void showMoveTickets(final ArrayList<Ticket> tickets) {
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar);
         } else {
             builder = new AlertDialog.Builder(this);
         }
 
-        final CharSequence[] items = new CharSequence[(selectedTrip != null) ? trips.size() : trips.size() - 1];
-        for (int i = 0; i < items.length; i++) {
+        final CharSequence[] items = new CharSequence[(selectedTrip == null) ? trips.size() : trips.size() - 1];
+        for (int i = 0; i < items.length; i ++) {
             if (selectedTrip != null) {
-                if (selectedTrip.getIdTrip() != trips.get(i).getIdTrip())
+                if(selectedTrip.getIdTrip() != trips.get(i).getIdTrip())
                     items[i] = trips.get(i).toString();
-            } else items[i] = trips.get(i).toString();
+            }
+            else items[i] = trips.get(i).toString();
         }
 
         builder.setTitle("Mover tickets")
                 .setSingleChoiceItems(items, 0, null)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        ListView lw = ((AlertDialog) dialog).getListView();
+                        ListView lw = ((AlertDialog)dialog).getListView();
 
                         moveTickets(tickets, trips.get(lw.getCheckedItemPosition()));
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
                 .show();
     }
 
@@ -344,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             btnAction.setClickable(false);
             //recyclerView.setVisibility(View.GONE);
-            //  pbMain.setVisibility(View.VISIBLE);
+          //  pbMain.setVisibility(View.VISIBLE);
         }
 
         @Override

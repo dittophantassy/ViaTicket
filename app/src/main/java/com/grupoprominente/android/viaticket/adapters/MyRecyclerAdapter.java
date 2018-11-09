@@ -21,7 +21,7 @@ import com.grupoprominente.android.viaticket.models.Ticket;
 public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAdapter.TicketViewHolder> {
     private MyRecyclerAdapterClickListener clickListener;
 
-    protected static class TicketViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    protected static class TicketViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private MyRecyclerAdapterClickListener clickListener;
 
         View view;
@@ -38,8 +38,11 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
 
             view = itemView;
 
+
             clickListener = listener;
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+            itemView.setLongClickable(true);
             imageCategory = itemView.findViewById(R.id.tv_ticket_imgCategory);
             txtCategory = itemView.findViewById(R.id.tv_ticket_txtCategory);
             txtAmount = itemView.findViewById(R.id.tv_ticket_txtAmount);
@@ -51,6 +54,12 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
         @Override
         public void onClick(View v) {
             clickListener.onItemClick(v, getLayoutPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v){
+            clickListener.onItemLongClick(v, getLayoutPosition());
+            return true;
         }
     }
 
@@ -70,12 +79,17 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
     public void onBindViewHolder(@NonNull TicketViewHolder holder, int position) {
         Ticket t = getItems().get(position);
         if (t.getTicketType()!=null)
-            holder.txtCategory.setText(t.getTicketType().toString());
+            holder.txtCategory.setText(t.getTicketType().getResource());
         if (t.getIssueDate()!=null)
             holder.txtIssueDate.setText(holder.dateFormat.format("dd/MM", t.getIssueDate()));
-        holder.txtAmount.setText(t.getAmount().toString());
-
-        Drawable ticketBackground = holder.imageCategory.getBackground();
+        switch (t.getCurrency())
+        {
+            case PESO: holder.txtAmount.setText(holder.view.getContext().getString(R.string.currency_peso_format, t.getAmount()));
+                break;
+            case DOLLAR: holder.txtAmount.setText(holder.view.getContext().getString(R.string.currency_dollar_format, t.getAmount()));
+                break;
+            default:  holder.txtAmount.setText(t.getAmount().toString());
+        }
 
         if (t.getTicketType() != null) {
             switch (t.getTicketType()) {

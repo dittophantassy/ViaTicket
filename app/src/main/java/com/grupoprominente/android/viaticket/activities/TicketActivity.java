@@ -18,6 +18,8 @@ import android.widget.Button;
 
 
 import com.grupoprominente.android.viaticket.R;
+import com.grupoprominente.android.viaticket.adapters.CurrencyAdapter;
+import com.grupoprominente.android.viaticket.adapters.TicketTypeAdapter;
 import com.grupoprominente.android.viaticket.models.CurrencyType;
 import com.grupoprominente.android.viaticket.models.Ticket;
 import com.grupoprominente.android.viaticket.models.TicketType;
@@ -60,13 +62,11 @@ public class TicketActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         spnCurrency = (Spinner) findViewById(R.id.spnCurrency);
-        ArrayAdapter<CurrencyType> currencyAdapter = (new ArrayAdapter<CurrencyType>(this, android.R.layout.simple_spinner_item, CurrencyType.values()));
-        currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        CurrencyAdapter currencyAdapter = new CurrencyAdapter(this);
         spnCurrency.setAdapter(currencyAdapter);
 
         spnTypes = (Spinner) findViewById(R.id.spnTicketType);
-        ArrayAdapter<TicketType> typeAdapter = (new ArrayAdapter<TicketType>(this, android.R.layout.simple_spinner_item, TicketType.values()));
-        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<TicketType> typeAdapter = new TicketTypeAdapter(this);
         spnTypes.setAdapter(typeAdapter);
 
         txtIssued = (EditText) findViewById(R.id.txtIssued);

@@ -10,4 +10,16 @@
     <string name="main_activity_my_trips">Mis viajes</string>
     <string name="unassigned_tickets">Tickets sin asignar</string>
 
+    <string name="currency_peso" >Peso</string>
+    <string name="currency_dollar" >Dólar</string>
+
+    <string name="ticket_type_food" >Cómida</string>
+    <string name="ticket_type_taxi" >Taxi</string>
+    <string name="ticket_type_transport" >Transporte</string>
+    <string name="ticket_type_lodging" >Alojamiento</string>
+    <string name="ticket_type_other" >Otro</string>
+
+    <string name="currency_peso_format" >$ %1$.2f</string>
+    <string name="currency_dollar_format" >US$ %1$.2f</string>
+
 </resources>
