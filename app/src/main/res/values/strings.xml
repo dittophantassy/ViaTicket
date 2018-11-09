@@ -23,7 +23,7 @@
     <string name="ticket_activity_edit_title">Editar Ticket</string>
     <string name="ticket_activity_create_title">Crear Ticket</string>
 
-    <string name="unassigned_tickets">Tickets sin asignar</string>
+    <string name="unassigned_tickets">Ticket sin asignar</string>
 
     <string name="currency_peso" >Peso</string>
     <string name="currency_dollar" >Dólar</string>

@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
             else items[i] = trips.get(i).toString();
         }
 
-        builder.setTitle("Mover tickets")
+        builder.setTitle(R.string.main_activity_move_tickets)
                 .setSingleChoiceItems(items, 0, null)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
     private void moveTickets(final ArrayList<Ticket> tickets, final Trip trip) {
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar);
         } else {
             builder = new AlertDialog.Builder(this);
         }
@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         for (Ticket ticket : tickets) {
                             ticket.setIdTrip(trip.getIdTrip());
-                            ticket.update();
+                            ticket.save();
                         }
 
                         loadTickets();
@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected TicketResponse doInBackground(Void ...voids) {
             TicketResponse response = null;
-            boolean errorAlConvertirImagen = false;
+            boolean errorConvertingImage = false;
 
             for (Ticket ticket : adapter.getItems()) {
                 if (ticket.getImageFile() != null && !ticket.getImageFile().isEmpty()) {
@@ -395,13 +395,13 @@ public class MainActivity extends AppCompatActivity {
                         ticket.setImage(byteArray.toByteArray());
 
                     } catch (IOException ex) {
-                        errorAlConvertirImagen = true;
+                        errorConvertingImage = true;
                         break;
                     }
                 }
             }
 
-            if(!errorAlConvertirImagen)
+            if(!errorConvertingImage)
                 response = RestApi.getInstance().sendTickets(adapter.getItems());
 
             return response;

@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -74,9 +75,13 @@ public class TicketActivity extends AppCompatActivity {
         spnTypes.setAdapter(typeAdapter);
 
         spnTrips = findViewById(R.id.spnTrip);
-        ArrayAdapter<Trip> tripAdapter = new ArrayAdapter<Trip>(this,android.R.layout.simple_spinner_dropdown_item,Trip.listAll(Trip.class));
+
+        Trip empty = new Trip();
+        empty.setDestination(this.getString(R.string.unassigned_tickets));
+        List<Trip> trips = Trip.listAll(Trip.class);
+        trips.add(0, empty);
+        ArrayAdapter<Trip> tripAdapter = new ArrayAdapter<Trip>(this, android.R.layout.simple_spinner_dropdown_item, trips);
         spnTrips.setAdapter(tripAdapter);
-        spnTrips.setVisibility(View.GONE);//TODO
 
         txtIssued = findViewById(R.id.txtIssued);
         myCalendar = Calendar.getInstance();
@@ -106,8 +111,7 @@ public class TicketActivity extends AppCompatActivity {
                 etAmount.setText(getString(R.string.currency_none_format, ticket.getAmount()));
                 spnCurrency.setSelection(currencyAdapter.getPosition(ticket.getCurrency()));
                 spnTypes.setSelection(typeAdapter.getPosition(ticket.getTicketType()));
-                //if (tripId>0)
-                //    spnTrips.setSelection(tripAdapter.getPosition(Trip.findById(Trip.class, tripId)));
+
                 if (ticket.getImageFile() != null)
                     mCurrentPhotoPath = Uri.parse(ticket.getImageFile());
 
@@ -120,8 +124,18 @@ public class TicketActivity extends AppCompatActivity {
                 ticket.setCid(cid);
 
                 txtCid.setText(cid);
+                etAmount.setText("0.00");
             }
-
+            if (tripId>0)
+            {
+                for (Trip trip :trips)
+                {
+                    if (trip.getIdTrip() == tripId){
+                        spnTrips.setSelection(tripAdapter.getPosition(trip));
+                        break;
+                    }
+                }
+            }
             ticket.setIdTrip(tripId);
         }
 
@@ -212,8 +226,7 @@ public class TicketActivity extends AppCompatActivity {
             ticket = new Ticket();
 
 
-        if (tripId>0)
-            ticket.setIdTrip(tripId);
+        ticket.setIdTrip(((Trip)spnTrips.getSelectedItem()).getIdTrip());
 
         //TODO should I allow a zero amount? (in case of a split bill)
         String amount = etAmount.getText().toString();

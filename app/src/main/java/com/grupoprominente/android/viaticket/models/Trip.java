@@ -60,6 +60,8 @@ public class Trip extends SugarRecord implements Serializable {
 
     @Override
     public String toString() {
-        return destination + " - " + android.text.format.DateFormat.format("dd/MM", tripDate);
+        if (tripDate!=null)
+            return destination + " - " + android.text.format.DateFormat.format("dd/MM", tripDate);
+        return destination;
     }
 }
