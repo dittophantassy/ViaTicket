@@ -12,6 +12,7 @@ public class User {
     private String password;
     @SerializedName("Code")
     private int code;
+    private int currentTripId;
 
     public String getUsername() {
         return username;
@@ -35,5 +36,13 @@ public class User {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public int getCurrentTripId() {
+        return currentTripId;
+    }
+
+    public void setCurrentTripId(int currentTripId) {
+        this.currentTripId = currentTripId;
     }
 }

@@ -63,7 +63,6 @@ public class RestApi
         }
         catch(Exception e)
         {
-            String a = "";
         }
 
         return tripsByUser;
@@ -82,7 +81,6 @@ public class RestApi
         }
         catch(Exception e)
         {
-            String a = "";
         }
 
         return genericResponse;
