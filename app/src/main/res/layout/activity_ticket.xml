@@ -61,6 +61,17 @@
             android:ems="10" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+        <EditText
+            android:id="@+id/txtCid"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:hint="CID"/>
+    </LinearLayout>
 
 
     <ImageButton

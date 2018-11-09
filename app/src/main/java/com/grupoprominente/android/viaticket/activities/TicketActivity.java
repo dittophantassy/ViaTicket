@@ -47,10 +47,12 @@ public class TicketActivity extends AppCompatActivity {
     private EditText txtIssued;
     private Calendar myCalendar;
     DatePickerDialog.OnDateSetListener dateListener;
+    private EditText txtCid;
     private Uri mCurrentPhotoPath;
     private Uri mTempPhotoPath;
 
- private int tripId;
+    private int tripId;
+    private String cid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,9 @@ public class TicketActivity extends AppCompatActivity {
         txtIssued = (EditText) findViewById(R.id.txtIssued);
         myCalendar = Calendar.getInstance();
         myCalendar.set(Calendar.HOUR_OF_DAY, 0);
+
+        txtCid = (EditText)findViewById(R.id.txtCid);
+
         updateLabel();
 
         imageButton = (ImageButton) this.findViewById(R.id.btnPhoto);
@@ -79,6 +84,7 @@ public class TicketActivity extends AppCompatActivity {
         if(extras != null) {
             ticketId = extras.getLong("ID");
             tripId = extras.getInt("TRIP_ID");
+            cid = extras.getString("CID");
 
             if (ticketId>0)
             {
@@ -94,10 +100,18 @@ public class TicketActivity extends AppCompatActivity {
                 spnTypes.setSelection(typeAdapter.getPosition(ticket.getTicketType()));
                 if (ticket.getImageFile() != null)
                     mCurrentPhotoPath = Uri.parse(ticket.getImageFile());
+
+                txtCid.setText(ticket.getCid());
+
                 imageButton.setImageURI(mCurrentPhotoPath);
             }
-            else
+            else {
                 ticket = new Ticket();
+                ticket.setCid(cid);
+
+                txtCid.setText(cid);
+            }
+
             ticket.setIdTrip(tripId);
         }
 
@@ -204,6 +218,8 @@ public class TicketActivity extends AppCompatActivity {
         ticket.setTicketType((TicketType) spnTypes.getSelectedItem());
 
         ticket.setIssueDate(myCalendar.getTime());
+        ticket.setCid((!txtCid.getText().toString().isEmpty()) ? txtCid.getText().toString() : cid);
+
         //TODO es obligatoria la foto?
         if (mCurrentPhotoPath!= null)
             ticket.setImageFile(mCurrentPhotoPath.toString());

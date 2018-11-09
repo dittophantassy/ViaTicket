@@ -35,15 +35,14 @@ import com.grupoprominente.android.viaticket.application.Global;
 import com.grupoprominente.android.viaticket.data.api.RestApi;
 import com.grupoprominente.android.viaticket.data.api.response.TicketResponse;
 import com.grupoprominente.android.viaticket.data.api.response.TripResponse;
+import com.grupoprominente.android.viaticket.data.serialization.UserSerializer;
 import com.grupoprominente.android.viaticket.models.Ticket;
-import com.grupoprominente.android.viaticket.models.TicketType;
 import com.grupoprominente.android.viaticket.models.Trip;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -81,51 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        mDrawerLayout.closeDrawers();
-                        menuItem.setCheckable(true);
-                        menuItem.setChecked(true);
-
-                        if (mPreviousMenuItem != null) {
-                            mPreviousMenuItem.setChecked(false);
-                        }
-
-                        mPreviousMenuItem = menuItem;
-
-                        switch (menuItem.getItemId()) {
-                            case R.id.item_unassigned:
-                                setTitle(R.string.unassigned_tickets);
-                                menuItem.setChecked(true);
-
-                                selectedTrip = null;
-
-                                btnAction.setImageResource(R.drawable.ic_create_new_folder_black_24dp);
-
-                                break;
-                            case R.id.item_logout:
-                                SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.session_shared_preferences), Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.remove(getString(R.string.session_logged_user_key));
-                                editor.commit();
-
-                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-
-                                startActivity(intent);
-                                finish();
-
-                                break;
-
-                            default:
-                                Toolbar toolbar = findViewById(R.id.toolbar);
-                                toolbar.setTitle(menuItem.getTitle());
-
-                                if (trips != null && trips.size() > 0)
-                                    selectedTrip = trips.get(menuItem.getItemId());
-
-                                btnAction.setImageResource(R.drawable.ic_send_black_24dp);
-
-                                break;
-                        }
-
+                        selectMenuItem(menuItem);
                         loadTickets();
 
                         btnAction.setOnClickListener(new View.OnClickListener() {
@@ -136,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     synchronizeTickets();
                                 }
-
-
                             }
                         });
 
@@ -155,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, TicketActivity.class);
                 intent.putExtra("ID", t.getId());
                 intent.putExtra("TRIP_ID", (selectedTrip != null) ? selectedTrip.getIdTrip() : 0);
+                intent.putExtra("CID", (selectedTrip != null) ? selectedTrip.getCid() : "");
 
                 startActivity(intent);
 
@@ -169,17 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     builder = new AlertDialog.Builder(MainActivity.this);
                 }
 
-                /*final CharSequence[] items = new CharSequence[(selectedTrip == null) ? trips.size() : trips.size() - 1];
-                for (int i = 0; i < items.length; i ++) {
-                    if (selectedTrip != null) {
-                        if(selectedTrip.getIdTrip() != trips.get(i).getIdTrip())
-                            items[i] = trips.get(i).toString();
-                    }
-                    else items[i] = trips.get(i).toString();
-                }*/
-
                 builder.setTitle("Eliminar Ticket?")
-                        //.setSingleChoiceItems(items, 0, null)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Ticket t = adapter.getItems().get(position);
@@ -191,11 +135,7 @@ public class MainActivity extends AppCompatActivity {
                                 loadTickets();
                             }
                         })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
+                        .setNegativeButton(android.R.string.cancel, null)
                         .show();
             }
         });
@@ -209,15 +149,15 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         Intent intent = new Intent(MainActivity.this, TicketActivity.class);
                         intent.putExtra("TRIP_ID", (selectedTrip != null) ? selectedTrip.getIdTrip() : 0);
+                        intent.putExtra("CID", (selectedTrip != null) ? selectedTrip.getCid() : "");
 
                         startActivity(intent);
                     }
                 }
         );
 
-        navigationView.getMenu().getItem(0).setChecked(true);
+        selectMenuItem(navigationView.getMenu().getItem(0));
     }
-
 
     @Override
     protected void onResume() {
@@ -240,34 +180,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class LoadMenuItemsTask extends AsyncTask<Void, Integer, ArrayList<Trip>> {
-        private String username;
+    private void selectMenuItem(MenuItem menuItem) {
+        mDrawerLayout.closeDrawers();
+        menuItem.setCheckable(true);
+        menuItem.setChecked(true);
 
-        public LoadMenuItemsTask(String username) {
-            this.username = username;
+        if (mPreviousMenuItem != null) {
+            mPreviousMenuItem.setChecked(false);
         }
 
-        @Override
-        protected ArrayList<Trip> doInBackground(Void... voids) {
-            TripResponse response = RestApi.getInstance().getTripsByUsername(username);
-            trips = response.getTrips();
+        mPreviousMenuItem = menuItem;
 
-            return trips;
-        }
+        switch (menuItem.getItemId()) {
+            case R.id.item_unassigned:
+                setTitle(R.string.unassigned_tickets);
+                menuItem.setChecked(true);
 
-        @Override
-        protected void onPostExecute(ArrayList<Trip> tripsByCurrentUser) {
-            NavigationView navigationView = findViewById(R.id.nav_view);
-            Menu tripsMenu = navigationView.getMenu().getItem(1).getSubMenu();
+                selectedTrip = null;
 
-            if (tripsByCurrentUser.size() > 0) {
-                tripsMenu.clear();
-                for (int i = 0; i < tripsByCurrentUser.size(); i++) {
-                    Trip currentTrip = tripsByCurrentUser.get(i);
-                    MenuItem item = tripsMenu.add(0, i, 0, currentTrip.toString());
-                    item.setIcon(R.drawable.ic_flight_black_24dp);
-                }
-            }
+                btnAction.setImageResource(R.drawable.ic_create_new_folder_black_24dp);
+
+                break;
+            case R.id.item_logout:
+                logout();
+
+                break;
+
+            default:
+                setTitle(menuItem.getTitle());
+
+                if (trips != null && trips.size() > 0)
+                    selectedTrip = trips.get(menuItem.getItemId());
+
+                btnAction.setImageResource(R.drawable.ic_send_black_24dp);
+
+                break;
         }
     }
 
@@ -302,11 +249,7 @@ public class MainActivity extends AppCompatActivity {
                             sendTicketsItemsTask.execute();
                         }
                     })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
-                        }
-                    })
+                    .setNegativeButton(android.R.string.no, null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
@@ -338,11 +281,7 @@ public class MainActivity extends AppCompatActivity {
                         moveTickets(tickets, trips.get(lw.getCheckedItemPosition()));
                     }
                 })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
-                        }
-                    })
+                .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
 
@@ -366,13 +305,53 @@ public class MainActivity extends AppCompatActivity {
                         loadTickets();
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
+                .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    private class LoadMenuItemsTask extends AsyncTask<Void, Integer, TripResponse> {
+        private String username;
+
+        public LoadMenuItemsTask(String username) {
+            this.username = username;
+        }
+
+        @Override
+        protected TripResponse doInBackground(Void... voids) {
+            TripResponse response = RestApi.getInstance().getTripsByUsername(username);
+
+            return  response;
+        }
+
+        @Override
+        protected void onPostExecute(TripResponse response) {
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            Menu tripsMenu = navigationView.getMenu().getItem(1).getSubMenu();
+
+            if (response != null && response.getCode() == 0) {
+                if (response.getTrips().size() > 0) {
+                    trips = response.getTrips();
+                    tripsMenu.clear();
+                    for (int i = 0; i < trips.size(); i++) {
+                        Trip currentTrip = trips.get(i);
+                        MenuItem item = tripsMenu.add(0, i, 0, currentTrip.toString());
+                        item.setIcon(R.drawable.ic_flight_black_24dp);
+                    }
+                }
+            }
+            else {
+                if (response != null) {
+                    Snackbar.make(findViewById(android.R.id.content), "Se produjo un error al consultar viajes", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    if (Global.isConnected) {
+                        Snackbar.make(findViewById(android.R.id.content), "Se produjo un error de conexión al servidor", Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        Snackbar.make(findViewById(android.R.id.content), "No hay conexión a internet", Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
     }
 
     private class SendTicketsItemsTask extends AsyncTask<Void, Integer, TicketResponse> {
@@ -431,6 +410,23 @@ public class MainActivity extends AppCompatActivity {
             //recyclerView.setVisibility(View.VISIBLE);
             //  pbMain.setVisibility(View.GONE);
         }
+    }
+
+    private void logout()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("¿Confirma cerrar sesión");
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                UserSerializer.getInstance().clear(MainActivity.this);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("No", null);
+        builder.show();
     }
 
 }

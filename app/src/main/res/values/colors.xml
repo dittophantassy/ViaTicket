@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#02597D</color>
+    <color name="colorSecondary">#FDC353</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTicketTypeIcon">#CCCCCC</color>
 </resources>

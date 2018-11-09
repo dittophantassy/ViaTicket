@@ -38,7 +38,6 @@ public class MyRecyclerAdapter extends MyArrayRecycleAdapter<Ticket,MyRecyclerAd
 
             view = itemView;
 
-
             clickListener = listener;
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
