@@ -260,7 +260,7 @@ public class TicketActivity extends AppCompatActivity {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
+                ".bmp",         /* suffix */
                 storageDir      /* directory */
         );
 

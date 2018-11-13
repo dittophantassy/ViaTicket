@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -392,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
 
                         ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArray);
-                        ticket.setImage(byteArray.toByteArray());
+                        ticket.setImage(Base64.encodeToString(byteArray.toByteArray(), Base64.NO_WRAP));
 
                     } catch (IOException ex) {
                         errorConvertingImage = true;

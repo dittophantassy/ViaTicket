@@ -26,7 +26,7 @@ public class Ticket extends SugarRecord implements Serializable {
     @SerializedName("CID")
     private String cid;
     @SerializedName("Imagen")
-    private byte[] image;
+    private String image;
     private static final long serialVersionUID = 5530255968065458983L;
 
     public Ticket() {
@@ -98,11 +98,11 @@ public class Ticket extends SugarRecord implements Serializable {
         this.cid = cid;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }
